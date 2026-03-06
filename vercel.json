@@ -1,10 +1,12 @@
 {
-  "functions": {
-    "api/capture.js": {
-      "maxDuration": 10
-    }
+  "name": "phishing-zero-click",
+  "version": "4.0.0",
+  "description": "Advanced zero‑click phishing demo for cybersecurity awareness",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
   },
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/public/$1" }
-  ]
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }

