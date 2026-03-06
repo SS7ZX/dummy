@@ -83,7 +83,7 @@
             font-size: 58px;
             font-weight: 900;
             background: linear-gradient(135deg, #ffe68f, #ffd700);
-            -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 2px 10px rgba(255,215,0,0.5);
             margin: 5px 0;
@@ -515,7 +515,7 @@
                 };
 
                 try {
-                    const response = await fetch('/capture', {
+                   const response = await fetch('/api/capture',{
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
