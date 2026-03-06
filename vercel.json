@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "api/capture.js": {
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/public/$1" }
+  ]
+}
