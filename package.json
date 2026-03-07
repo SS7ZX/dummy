@@ -1,7 +1,7 @@
 {
-  "name": "phishing-zero-click",
-  "version": "4.0.0",
-  "description": "Advanced zero‑click phishing demo for cybersecurity awareness",
+  "name": "phishing-demo-backend",
+  "version": "1.0.0",
+  "description": "Backend untuk demo phishing zero‑click dengan Telegram",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
